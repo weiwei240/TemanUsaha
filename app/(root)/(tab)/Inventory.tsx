@@ -11,6 +11,8 @@ import { Switch } from "react-native";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { useState } from "react";
+import Search from "@/components/Search";
+import FilterDropdown from "@/components/Filter";
 
 const products = [
   {
@@ -65,7 +67,6 @@ const segments = ["All Categories", "Sort By", "Status"];
 
 export default function Inventory() {
   const insets = useSafeAreaInsets();
-  const [selected, setSelected] = useState(0);
 
   return (
     <ScrollView
@@ -100,48 +101,8 @@ export default function Inventory() {
       </View>
 
       {/* Search & Filter */}
-      <View className="flex-row items-center bg-white rounded-full px-4 py-1 mx-5 shadow-md">
-        <Image
-          source={icons.search}
-          className="w-5 h-5 mr-3"
-          tintColor="#2D2D2D"
-        />
-        <TextInput
-          placeholder="Search"
-          placeholderTextColor="#2D2D2D"
-          className="flex-1 text-base text-[#2D2D2D]"
-        />
-        <TouchableOpacity>
-          <Image
-            source={icons.filter}
-            className="w-5 h-5"
-            tintColor="#2D2D2D"
-          />
-        </TouchableOpacity>
-      </View>
-      <View className="flex-row justify-between px-5 py-2">
-        {segments.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => setSelected(index)}
-            className={`px-4 py-2 rounded-full border flex-row items-center justify-between gap-3 
-            border-gray-500"}
-          `}
-          >
-            <Text
-              className={`text-sm font-rubik-medium text-gray-700"
-              }`}
-            >
-              {item}
-            </Text>
-            <Image
-              source={icons.dropdown}
-              className="size-3"
-              tintColor={"black"}
-            ></Image>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <Search />
+      <FilterDropdown segments={segments}/>
 
       {/* Product List */}
       {products.map((section, index) => (

@@ -63,12 +63,17 @@ const AnimatedIcon = ({ focused }: { focused: boolean }) => {
 
   return (
     <Animated.View
-      style={[styles.plusCircle, { transform: [{ scale: scaleAnim }] }]}
+      style={[styles.plusCircle, 
+        { 
+          transform: [{ scale: scaleAnim }], 
+          backgroundColor: focused ? "white" : "green", 
+          borderWidth: focused ? 1.5 : 0,
+          borderColor: focused ? "green" : "transparent"}]}
     >
       <Ionicons
         name={focused ? "close" : "add"}
         size={focused ? 35 : 38} // slight increase for balance
-        color="white"
+        color={focused ? "green" : "white"}
       />
     </Animated.View>
   );
