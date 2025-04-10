@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Keyboard } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '@/components/Header'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -15,6 +15,22 @@ const items = [
 const Receipt = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/')
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true)
+    })
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
 
   return (
     <View className="flex-1 bg-white">
@@ -93,24 +109,26 @@ const Receipt = () => {
       </ScrollView>
 
       {/* Button */}
-      <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>
-        <View className='flex flex-col items-center'>
-          <View className='px-5 py-2 w-full gap-4'>
-            <TouchableOpacity
-              className='items-center justify-center bg-white border border-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-              onPress={() => handleBack()}
-            >
-              <Text className='text-green-600 text-lg text-center font-rubik-bold mt-1'>Print Receipt</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-              onPress={() => handleBack()}
-            >
-              <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Send Bill</Text>
-            </TouchableOpacity>
+      {!keyboardVisible && (
+        <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>
+          <View className='flex flex-col items-center'>
+            <View className='px-5 py-2 w-full gap-4'>
+              <TouchableOpacity
+                className='items-center justify-center bg-white border border-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
+                onPress={() => handleBack()}
+              >
+                <Text className='text-green-600 text-lg text-center font-rubik-bold mt-1'>Print Receipt</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
+                onPress={() => handleBack()}
+              >
+                <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Send Bill</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      )}
     </View>
   )
 }

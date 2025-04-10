@@ -10,12 +10,12 @@ const FilterDropdown = ({segments}: Props) => {
   const [selected, setSelected] = useState(0);
 
   return (
-    <View className="flex-row justify-between px-5 py-2">
+    <View className="flex-row justify-between px-5 py-2 gap-2">
       {segments.map((item, index) => (
         <TouchableOpacity
           key={index}
           onPress={() => setSelected(index)}
-          className={`px-4 py-2 rounded-full border flex-row items-center justify-between gap-3 
+          className={`px-4 py-2 rounded-full border flex-row items-center justify-between gap-2
           border-gray-500"}
         `}
         >
@@ -48,7 +48,7 @@ export const FilterHorizontal = ({segments}: Props) => {
   }
   
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} className='py-2 ml-2 mr-2'>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} className='py-2 ml-2 mr-5'>
       {segments.map((item, index) => (
         <TouchableOpacity 
           key={index}

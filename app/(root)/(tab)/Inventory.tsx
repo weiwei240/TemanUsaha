@@ -13,6 +13,9 @@ import images from "@/constants/images";
 import { useState } from "react";
 import Search from "@/components/Search";
 import FilterDropdown from "@/components/Filter";
+import InventoryCard from "@/components/InventoryCard";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const products = [
   {
@@ -67,6 +70,9 @@ const segments = ["All Categories", "Sort By", "Status"];
 
 export default function Inventory() {
   const insets = useSafeAreaInsets();
+  const handleFeatured = () => router.push('/Featured')
+  const handleCategory = () => router.push('/Category')
+  const handleCreateProduct = () => router.push('/CreateProduct')
 
   return (
     <ScrollView
@@ -79,25 +85,35 @@ export default function Inventory() {
           Inventory{"\n"}Management
         </Text>
         <View className="flex-row gap-3">
-          <Image source={icons.plus} className="size-7" tintColor="white" />
-          <Image source={icons.settings} className="size-7" tintColor="white" />
+          <TouchableOpacity onPress={handleCreateProduct}>
+            <Image source={icons.plus} className="size-7" tintColor="white" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={icons.settings} className="size-7" tintColor="white" />
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Tabs */}
       <View className="flex-row px-5 pt-2 gap-3 mb-2">
-        <View className="flex-1 rounded-2xl flex-row items-center justify-center py-3 shadow-xl shadow-black-300 bg-white gap-2">
+        <TouchableOpacity
+          className="flex-1 rounded-2xl flex-row items-center justify-center py-3 shadow-xl shadow-black-300 bg-white gap-2"
+          onPress={handleFeatured}
+        >
           <Image source={icons.medal} className="size-7"></Image>
           <Text className="text-black font-rubik-semibold text-lg">
             Featured (2)
           </Text>
-        </View>
-        <View className="flex-1 rounded-2xl flex-row items-center justify-center py-3 shadow-xl shadow-black-300 bg-white gap-2">
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="flex-1 rounded-2xl flex-row items-center justify-center py-3 shadow-xl shadow-black-300 bg-white gap-2"
+          onPress={handleCategory}
+        >
           <Image source={icons.category} className="size-7"></Image>
           <Text className="text-black font-rubik-semibold text-lg">
             Category (2)
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Search & Filter */}
@@ -111,39 +127,7 @@ export default function Inventory() {
             {section.category} ({section.items.length})
           </Text>
           {section.items.map((item, i) => (
-            <View
-              key={i}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 flex-row items-center p-3 mb-3"
-            >
-              <Image
-                source={item.image}
-                className="size-16 rounded-lg mr-3"
-                resizeMode="cover"
-              />
-              <View className="flex-1">
-                <Text className="text-base font-semibold">{item.name}</Text>
-                <Text className="text-sm text-gray-600">
-                  {item.price} /{" "}
-                  <Text className="text-xs text-gray-400">{item.unit}</Text>
-                </Text>
-                <View className="flex-row items-center gap-3 mt-1">
-                  <Text className="text-xs text-gray-500">
-                    🛒 Sold: {item.sold}
-                  </Text>
-                  <View className="w-px h-full bg-gray-300 " />
-                  <Text className="text-xs text-gray-500">
-                    📦 Stock: {item.stock}
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                value={item.active}
-                thumbColor="#15803d"
-                trackColor={{ false: "#fff", true: "#d1fae5" }} // false = light green, true = vibrant green
-              />
-
-              <Image source={icons.more} className="w-4 h-4 ml-2" />
-            </View>
+            <InventoryCard item={item} key={i}/>
           ))}
         </View>
       ))}
