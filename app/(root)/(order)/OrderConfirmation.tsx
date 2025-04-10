@@ -5,6 +5,7 @@ import images from '@/constants/images';
 import OrderCard from '@/components/OrderCard';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Header from '@/components/Header';
 
 const products = [
   {
@@ -58,7 +59,7 @@ const products = [
 const OrderConfirmation = () => {
   const insets = useSafeAreaInsets();
   const handleBack = () => router.push('/Add')
-  const handlePlaceOrder = () => router.push('/') // Payment Methods
+  const handlePlaceOrder = () => router.push('/PaymentMethods') // Payment Methods
 
   return (
     <View className="flex-1 bg-white">
@@ -66,14 +67,7 @@ const OrderConfirmation = () => {
         contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
       >
         {/* Header */}
-        <View className="bg-green-700 p-4 rounded-b-3xl flex-row items-center mb-2 gap-2">
-          <TouchableOpacity onPress={() => handleBack()}>
-            <Ionicons name='chevron-back-outline' color="white" size={32}/>
-          </TouchableOpacity>
-          <Text className="text-white text-2xl font-bold">
-            Order Confirmation
-          </Text>
-        </View>
+        <Header title='Order Confirmation' back={handleBack}/>
 
         {/* Order Summary */}
         <View className='flex-col px-5 py-2'>
@@ -138,6 +132,8 @@ const OrderConfirmation = () => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Button */}
       <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>
         <View className='flex flex-col items-center'>
           <View className='flex flex-row items-start justify-between w-full px-5 pt-2'>

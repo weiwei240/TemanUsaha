@@ -13,6 +13,7 @@ import { FilterHorizontal } from "@/components/Filter";
 import OrderCard from "@/components/OrderCard";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import Header from "@/components/Header";
 
 const products = [
   {
@@ -67,7 +68,7 @@ const segments = ["All", "Category 1", "Category 2", "Category 3", "Category 4",
 
 const Add = () => {
   const insets = useSafeAreaInsets();
-
+  const handleBack = () => router.push('/')
   const handleCartPress = () => router.push('/OrderConfirmation')
 
   return (
@@ -76,11 +77,7 @@ const Add = () => {
         contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
       >
         {/* Header */}
-        <View className="bg-green-700 p-4 rounded-b-3xl flex-row items-center mb-2">
-          <Text className="text-white text-2xl font-bold">
-            Place Order
-          </Text>
-        </View>
+        <Header title="Place Order" back={handleBack}/>
 
         {/* Search & Filter */}
         <Search />
