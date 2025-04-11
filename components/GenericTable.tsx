@@ -1,87 +1,77 @@
-import React, { useState } from 'react'
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import icons from '@/constants/icons'
-import { Ionicons } from '@expo/vector-icons'
+import React, { useState } from 'react';
+import { View, Image, ImageSourcePropType } from 'react-native';
+import { DataTable, Text } from 'react-native-paper';
+import images from '@/constants/images';
 
-interface ColumnConfig {
-  key: string
-  label: string
-  width?: number
-  render?: (value: any, row: any) => React.ReactNode
+
+export interface Column<T> {
+  key: keyof T;
+  label: string;
+  sortable?: boolean;
+  flex?: number;
 }
 
-interface Props {
-  columns: ColumnConfig[]
-  data: any[]
+interface Props<T>{
+  itemData: T[]
+  columns: Column<T>[]
 }
 
-const GenericTable = ({ columns, data }: Props) => {
-  const [sort, setSort] = useState(true)
-  const [sortCol, setSortCol] = useState("name")
+function GenericTable<T extends object>({ itemData, columns }: Props<T>) {
+  const [sortColumn, setSortColumn] = useState<keyof T>(columns[0]?.key as keyof T);
+  const [ascending, setAscending] = useState<boolean>(true);
+
+  const handleSort = (column: keyof T) => {
+    if (sortColumn === column) {
+      setAscending(!ascending);
+    } else {
+      setSortColumn(column);
+      setAscending(true);
+    }
+  };
+
+  const sortedData = [...itemData].sort((a, b) => {
+    const aValue = a[sortColumn];
+    const bValue = b[sortColumn];
+
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return ascending ? aValue - bValue : bValue - aValue;
+    }
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return ascending
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+    return 0;
+  });
 
   return (
-    <ScrollView horizontal>
-      <View className="rounded-xl border border-green-700 overflow-hidden bg-white">
-        {/* Header */}
-        <View className="flex-row bg-green-600">
-          {/* <View className="w-10 justify-center items-center p-2">
-            <Text className="font-bold">#</Text>
-          </View> */}
-          {columns.map((col, colIndex) => (
-            <View
-              key={col.key}
-              className={`p-2 justify-center flex-row items-center${colIndex !== 0 ? 'border-l  border-green-700' : ''}`}
-              style={{ width: col.width || 100 }}
-            >
-              <Text className="font-bold text-sm text-center text-white">{col.label}</Text>
-              <TouchableOpacity onPress={() => setSort(!sort)}>
-                <Ionicons name={sort ? 'chevron-down' : 'chevron-up'} size={16} color="white"/>
-              </TouchableOpacity>
-            </View>
-          ))}
-          <View className="w-10 p-2 border-l border-green-700" />
-        </View>
-
-        {/* Rows */}
-        {data.map((item, index) => (
-          <View
-            key={index}
-            className={`flex-row ${index % 2 === 0 ? 'bg-green-50': 'bg-white'}`}
+    <DataTable>
+      <DataTable.Header>
+        {columns.map((col) => (
+          <DataTable.Title
+            key={String(col.key)}
+            sortDirection={sortColumn === col.key ? (ascending ? 'ascending' : 'descending') : undefined}
+            onPress={() => col.sortable && handleSort(col.key as keyof T)}
+            style={{ flex: col.flex ?? 1 }}
           >
-            {/* <View className="w-10 justify-center items-center p-2">
-              <Text className="text-sm">{index + 1}.</Text>
-            </View> */}
-            {columns.map((col, colIndex) => (
-              <View
-                key={col.key}
-                className={`p-2 justify-center ${colIndex !== 0 ? 'border-l border-green-700' : ''}`}
-                style={{ width: col.width || 100 }}
-              >
-                {col.render
-                  ? col.render(item[col.key], item)
-                  : 
-                    <Text
-                      className="text-xs"
-                      style={{
-                        flexShrink: 1,
-                        flexWrap: 'wrap',
-                      }}
-                    >
-                      {item[col.key]}
-                    </Text>
-                }
-              </View>
-            ))}
-            <View className="w-10 justify-center items-center p-2 border-l border-green-700">
-              <TouchableOpacity>
-                <Ionicons name='ellipsis-vertical' size={16}/>
-              </TouchableOpacity>
-            </View>
-          </View>
+            {col.label}
+          </DataTable.Title>
         ))}
-      </View>
-    </ScrollView>
-  )
+      </DataTable.Header>
+
+      {sortedData.map((item, index) => (
+        <DataTable.Row key={index}>
+          {columns.map((col, i) => (
+            <DataTable.Cell key={i} style={{ flex: col.flex ?? 1 }}>
+              <Text>
+                {String(item[col.key as keyof T])}
+              </Text>
+            </DataTable.Cell>
+          ))}
+        </DataTable.Row>
+      ))}
+    </DataTable>
+  );
 }
 
-export default GenericTable
+export default GenericTable;

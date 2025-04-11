@@ -6,32 +6,45 @@ import { router } from 'expo-router'
 import images from '@/constants/images'
 import GenericTable from '@/components/GenericTable'
 import Search from '@/components/Search'
+import { Column } from '@/components/GenericTable'
 
-const categoryColumns = [
-  {
-    key: 'name',
-    label: 'Name',
-    width: 180,
-    render: (_: any, row: any) => (
-      <View className="flex-row items-center gap-2">
-        <Image source={row.image} className="w-12 h-12 rounded-sm mr-2" />
-        <Text
-          className="text-xs"
-          style={{
-            flexShrink: 1,
-            flexWrap: 'wrap',
-          }}
-          numberOfLines={0}
-        >
-          {row.name}
-        </Text>
-      </View>
-    ),
+// const categoryColumns = [
+//   {
+//     key: 'name',
+//     label: 'Name',
+//     width: 180,
+//     render: (_: any, row: any) => (
+//       <View className="flex-row items-center gap-2">
+//         <Image source={row.image} className="w-12 h-12 rounded-sm mr-2" />
+//         <Text
+//           className="text-xs"
+//           style={{
+//             flexShrink: 1,
+//             flexWrap: 'wrap',
+//           }}
+//           numberOfLines={0}
+//         >
+//           {row.name}
+//         </Text>
+//       </View>
+//     ),
     
-  },
-  { key: 'itemCount', label: 'Items', width: 60 },
-  { key: 'dateModified', label: 'Modified', width: 100 },
-]
+//   },
+//   { key: 'itemCount', label: 'Items', width: 60 },
+//   { key: 'dateModified', label: 'Modified', width: 100 },
+// ]
+
+interface ItemCategory {
+  name: string;
+  itemCount: number;
+  dateModified: string;
+}
+
+const categoryColumns: Column<ItemCategory>[] = [
+  { key: 'name', label: 'Category', sortable: true },
+  { key: 'itemCount', label: 'Item Count', sortable: true },
+  { key: 'dateModified', label: 'Date Modified', sortable: true },
+] as const
 
 const categoryData = [
   {
@@ -60,7 +73,7 @@ const Category = () => {
       >
           <Search />
           <View className='px-5 py-2'>
-            <GenericTable columns={categoryColumns} data={categoryData}/>
+            <GenericTable<ItemCategory> itemData={categoryData} columns={categoryColumns} />
           </View>
       </ScrollView>
     </View>
