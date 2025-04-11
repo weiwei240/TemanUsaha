@@ -48,7 +48,7 @@ const InventoryCard = ({item}: Props) => {
         value={isActive}
         onValueChange={setIsActive}
         thumbColor={isActive ? "#15803d" : "#727272"}
-        trackColor={{ false: "#fff", true: "#d1fae5" }} // false = light green, true = vibrant green
+        trackColor={{ false: "#fff", true: "#d1fae5" }}
       />
       <TouchableOpacity>
         <Image source={icons.more} className="w-4 h-4 ml-2" />

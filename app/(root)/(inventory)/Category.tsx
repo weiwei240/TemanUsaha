@@ -5,18 +5,29 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import images from '@/constants/images'
 import GenericTable from '@/components/GenericTable'
+import Search from '@/components/Search'
 
 const categoryColumns = [
   {
     key: 'name',
     label: 'Name',
-    width: 160,
+    width: 180,
     render: (_: any, row: any) => (
       <View className="flex-row items-center gap-2">
-        <Image source={row.image} className="w-6 h-6 rounded-sm mr-2" />
-        <Text className="text-sm">{row.name}</Text>
+        <Image source={row.image} className="w-12 h-12 rounded-sm mr-2" />
+        <Text
+          className="text-xs"
+          style={{
+            flexShrink: 1,
+            flexWrap: 'wrap',
+          }}
+          numberOfLines={0}
+        >
+          {row.name}
+        </Text>
       </View>
     ),
+    
   },
   { key: 'itemCount', label: 'Items', width: 60 },
   { key: 'dateModified', label: 'Modified', width: 100 },
@@ -24,7 +35,7 @@ const categoryColumns = [
 
 const categoryData = [
   {
-    name: 'Kitchen Appliances',
+    name: 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z',
     image: images.kitchen,
     itemCount: 2,
     dateModified: '2 days ago',
@@ -47,8 +58,11 @@ const Category = () => {
           contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
     >
         <Header title='Category' back={handleBack}/>
+        <Search />
 
-        <GenericTable columns={categoryColumns} data={categoryData}/>
+        <View className='px-5 py-2'>
+          <GenericTable columns={categoryColumns} data={categoryData}/>
+        </View>
     </ScrollView>
   )
 }

@@ -2,11 +2,11 @@ import icons from "./icons";
 import images from "./images";
 
 export const FEATURE_MENUS = [
-  { label: "Product", icon: images.product },
-  { label: "Billing", icon: images.billing },
-  { label: "Offering", icon: images.offering },
-  { label: "Staff", icon: images.staff },
-  { label: "Customer", icon: images.customer },
+  { label: "Product", icon: images.product, route: '/Inventory' },
+  { label: "Billing", icon: images.billing, route: '/' },
+  { label: "Offering", icon: images.offering, route: '/' },
+  { label: "Staff", icon: images.staff, route: '/' },
+  { label: "Customer", icon: images.customer, route: '/' },
 ];
 
 export const cards = [

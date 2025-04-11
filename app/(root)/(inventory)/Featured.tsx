@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import GenericTable from '@/components/GenericTable'
 import images from '@/constants/images'
+import Search from '@/components/Search'
 
 const featuredColumns = [
   {
@@ -13,12 +14,21 @@ const featuredColumns = [
     width: 160,
     render: (_: any, row: any) => (
       <View className="flex-row items-center gap-2">
-        <Image source={row.image} className="w-6 h-6 rounded-sm mr-2" />
-        <Text className="text-sm">{row.name}</Text>
+        <Image source={row.image} className="w-12 h-12 rounded-sm mr-2" />
+        <Text
+          className="text-xs"
+          style={{
+            flexShrink: 1,
+            flexWrap: 'wrap',
+          }}
+          numberOfLines={0}
+        >
+          {row.name}
+        </Text>
       </View>
     ),
   },
-  { key: 'price', label: 'Price', width: 100 },
+  { key: 'price', label: 'Price', width: 80 },
   { key: 'stock', label: 'Stock', width: 60 },
   { key: 'sold', label: 'Sold', width: 60 },
 ]
@@ -28,7 +38,7 @@ const featuredData = [
     name: 'Non-Stick Pan',
     image: images.pan,
     price: 'Rp 90.000',
-    stock: 20,
+    stock: 2,
     sold: 90,
   },
   {
@@ -51,8 +61,11 @@ const Featured = () => {
           contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
     >
         <Header title='Featured' back={handleBack}/>
+        <Search />
 
-        <GenericTable columns={featuredColumns} data={featuredData}/>
+        <View className='px-5 py-2'>
+          <GenericTable columns={featuredColumns} data={featuredData}/>
+        </View>
     </ScrollView>
   )
 }
