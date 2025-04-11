@@ -5,19 +5,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import FormField from '@/components/FormField'
+import ImageUploader from '@/components/ImageUploader'
+import VariantCard from '@/components/VariantCard'
 
 const CreateProduct = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/Inventory')
 
   return (
-    <ScrollView
-      className="flex-1 bg-white"
-      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-    >
+    <View className='flex-1 bg-white'>
       <Header title='Create Product' back={handleBack} />
-
-      <View className='px-5 py-2'>
+      <ScrollView
+        className="px-5 py-2"
+        contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
         {/* Product Name */}
         <FormField label="Product Name" required>
           {() => (
@@ -111,8 +112,29 @@ const CreateProduct = () => {
             />
           )}
         </FormField>
-      </View>
-    </ScrollView>
+
+        {/* Product Status */}
+        <FormField label="Product Status" enableSwitch>
+          {(enabled) => <Text className='font-rubik'>{enabled ? 'Active' : 'Inactive'}</Text>}
+        </FormField>
+
+        {/* Product Image */}
+        <FormField label="Product Image">
+          {() => (
+            <View>
+              <ImageUploader />
+              <Text className="text-xs text-gray-500 mt-1">Image size must less than 10MB</Text>
+            </View>
+          )}
+        </FormField>
+
+        {/* Variant */}
+        <FormField label="Variant" enableSwitch>
+          {(enabled) => <VariantCard />}
+        </FormField>
+
+      </ScrollView>
+    </View>
   )
 }
 

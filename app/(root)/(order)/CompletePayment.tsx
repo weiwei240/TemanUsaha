@@ -12,12 +12,12 @@ const CompletePayment = () => {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-      >
-        {/* Header */}
-        <Header title='Complete Payment' back={handleBack}/>
+      {/* Header */}
+      <Header title='Complete Payment' back={handleBack}/>
 
+      <ScrollView
+        contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
         {/* QR Code */}
         <View className='flex-col px-5 py-2 justify-center items-center h-full'>
           <Text className='w-2/3 text-center mt-2 font-rubik'>Scan this QR Code to complete the payment</Text>

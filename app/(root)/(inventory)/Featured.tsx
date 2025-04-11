@@ -6,6 +6,7 @@ import { router } from 'expo-router'
 import GenericTable from '@/components/GenericTable'
 import images from '@/constants/images'
 import Search from '@/components/Search'
+import FilterDropdown from '@/components/Filter'
 
 const featuredColumns = [
   {
@@ -50,23 +51,26 @@ const featuredData = [
   },
 ]
 
+const segments = ["All Categories", "Sort By", "Status"];
 
 const Featured = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/Inventory')
 
   return (
-    <ScrollView
-          className="flex-1 bg-white"
-          contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-    >
-        <Header title='Featured' back={handleBack}/>
+    <View className='flex-1 bg-white'>
+      <Header title='Featured' back={handleBack}/>
+      <ScrollView
+            contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
         <Search />
+        <FilterDropdown segments={segments}/>
 
         <View className='px-5 py-2'>
           <GenericTable columns={featuredColumns} data={featuredData}/>
         </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }
 

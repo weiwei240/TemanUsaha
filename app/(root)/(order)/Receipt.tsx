@@ -34,12 +34,12 @@ const Receipt = () => {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-      >
-        {/* Header */}
-        <Header title='Receipt' back={handleBack}/>
+      {/* Header */}
+      <Header title='Receipt' back={handleBack}/>
 
+      <ScrollView
+        contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
         <Text className='text-xl font-rubik-semibold text-center my-4'>Payment Completed!</Text>
 
         {/* Receipt */}

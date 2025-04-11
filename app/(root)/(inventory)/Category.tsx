@@ -53,17 +53,17 @@ const Category = () => {
   const handleBack = () => router.push('/Inventory')
 
   return (
-    <ScrollView
-          className="flex-1 bg-white"
-          contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-    >
-        <Header title='Category' back={handleBack}/>
-        <Search />
-
-        <View className='px-5 py-2'>
-          <GenericTable columns={categoryColumns} data={categoryData}/>
-        </View>
-    </ScrollView>
+    <View className='flex-1 bg-white'>
+      <Header title='Category' back={handleBack}/>
+      <ScrollView
+            contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
+          <Search />
+          <View className='px-5 py-2'>
+            <GenericTable columns={categoryColumns} data={categoryData}/>
+          </View>
+      </ScrollView>
+    </View>
   )
 }
 

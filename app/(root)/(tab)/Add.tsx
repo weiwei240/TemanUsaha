@@ -91,12 +91,12 @@ const Add = () => {
 
   return (
     <View className="flex-1 bg-white">
+      {/* Header */}
+      <Header title="Place Order" back={handleBack}/>
+      
       <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
+        contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
       >
-        {/* Header */}
-        <Header title="Place Order" back={handleBack}/>
-
         {/* Search & Filter */}
         <Search />
         <FilterHorizontal segments={segments}/>

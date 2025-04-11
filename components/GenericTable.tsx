@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import icons from '@/constants/icons'
 import { Ionicons } from '@expo/vector-icons'
@@ -16,6 +16,9 @@ interface Props {
 }
 
 const GenericTable = ({ columns, data }: Props) => {
+  const [sort, setSort] = useState(true)
+  const [sortCol, setSortCol] = useState("name")
+
   return (
     <ScrollView horizontal>
       <View className="rounded-xl border border-green-700 overflow-hidden bg-white">
@@ -27,10 +30,13 @@ const GenericTable = ({ columns, data }: Props) => {
           {columns.map((col, colIndex) => (
             <View
               key={col.key}
-              className={`p-2 justify-center ${colIndex !== 0 ? 'border-l  border-green-700' : ''}`}
+              className={`p-2 justify-center flex-row items-center${colIndex !== 0 ? 'border-l  border-green-700' : ''}`}
               style={{ width: col.width || 100 }}
             >
               <Text className="font-bold text-sm text-center text-white">{col.label}</Text>
+              <TouchableOpacity onPress={() => setSort(!sort)}>
+                <Ionicons name={sort ? 'chevron-down' : 'chevron-up'} size={16} color="white"/>
+              </TouchableOpacity>
             </View>
           ))}
           <View className="w-10 p-2 border-l border-green-700" />

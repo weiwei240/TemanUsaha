@@ -16,12 +16,12 @@ const PaymentMethods = () => {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
-      >
-        {/* Header */}
-        <Header title='Payment Methods' back={handleBack}/>
+      {/* Header */}
+      <Header title='Payment Methods' back={handleBack}/>
 
+      <ScrollView
+        contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
         {/* Total Payment */}
         <View className='flex-col px-5 py-2'>
           <View className="flex flex-row items-center justify-between mt-2 mb-2">
