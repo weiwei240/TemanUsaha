@@ -3,19 +3,16 @@ import {
   Text,
   ScrollView,
   Image,
-  TextInput,
   TouchableOpacity,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Switch } from "react-native";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { useState } from "react";
 import Search from "@/components/Search";
 import FilterDropdown from "@/components/Filter";
 import InventoryCard from "@/components/InventoryCard";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
 
 const products = [
   {
@@ -23,7 +20,7 @@ const products = [
     items: [
       {
         name: "Non-Stick Pan",
-        price: "Rp 90.000",
+        price: 90000,
         unit: "Pcs",
         sold: 90,
         stock: 20,
@@ -32,7 +29,7 @@ const products = [
       },
       {
         name: "Steel Knife Set",
-        price: "Rp 60.000",
+        price: 60000,
         unit: "Pcs",
         sold: 60,
         stock: 60,
@@ -46,7 +43,7 @@ const products = [
     items: [
       {
         name: "Cooking Oil",
-        price: "Rp 9.000",
+        price: 9000,
         unit: "Liter",
         sold: 345,
         stock: 30,
@@ -55,7 +52,7 @@ const products = [
       },
       {
         name: "Egg",
-        price: "Rp 22.000",
+        price: 22000,
         unit: "Kg",
         sold: 60,
         stock: 30,
@@ -70,6 +67,7 @@ const segments = ["All Categories", "Sort By", "Status"];
 
 export default function Inventory() {
   const insets = useSafeAreaInsets();
+  const handleBack = () => router.push('/')
   const handleFeatured = () => router.push('/Featured')
   const handleCategory = () => router.push('/Category')
   const handleCreateProduct = () => router.push('/CreateProduct')
@@ -77,22 +75,10 @@ export default function Inventory() {
   return (
     <ScrollView
       className="flex-1 bg-white"
-      contentContainerStyle={{ paddingTop: insets.top, paddingBottom: 90 }}
+      contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
     >
       {/* Header */}
-      <View className="bg-green-700 p-4 rounded-b-3xl flex-row items-center justify-between">
-        <Text className="text-white text-2xl font-bold">
-          Inventory{"\n"}Management
-        </Text>
-        <View className="flex-row gap-3">
-          <TouchableOpacity onPress={handleCreateProduct}>
-            <Image source={icons.plus} className="size-7" tintColor="white" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={icons.settings} className="size-7" tintColor="white" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header title="Inventory" onBack={handleBack} onAdd={handleCreateProduct}/>
 
       {/* Tabs */}
       <View className="flex-row px-5 pt-2 gap-3 mb-2">

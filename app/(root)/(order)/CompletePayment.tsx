@@ -13,7 +13,7 @@ const CompletePayment = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Complete Payment' back={handleBack}/>
+      <Header title='Complete Payment' onBack={handleBack}/>
 
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

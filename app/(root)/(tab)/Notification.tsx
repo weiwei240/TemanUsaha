@@ -1,134 +1,158 @@
-import icons from "@/constants/icons";
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import Header from '@/components/Header'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
+import Search from '@/components/Search'
+import { FilterSwitch } from '@/components/Filter'
 
-const UserBalanceCard = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        {/* Balance Section */}
-        <View style={styles.balanceSection}>
-          <Image source={icons.wallet2} style={styles.iconWallet} />
-          <View>
-            <Text style={styles.balanceLabel}>Your Balance</Text>
-            <View style={styles.amountRow}>
-              <Text style={styles.balanceAmount}>Rp 2.500.000</Text>
-              <Image
-                source={icons.eye}
-                style={styles.iconEye}
-                tintColor="#000"
-              />
-            </View>
-          </View>
-        </View>
+const dummyTransactions = [
+  {
+    type: 'Order',
+    id: '24SEAA',
+    message: 'Order #24SEAA has been paid for Rp 85.100',
+    date: '21/09/2024',
+    time: '18:42',
+  },
+  {
+    type: 'Bill',
+    id: '83GASW',
+    message: 'Bill #83GASW has been paid for Rp 190.000',
+    date: '20/09/2024',
+    time: '13:21',
+  },
+  {
+    type: 'Bill',
+    id: '71KJAL',
+    message: 'Bill #71KJAL has been paid for Rp 38.400',
+    date: '18/09/2024',
+    time: '10:06',
+  },
+  {
+    type: 'Offer',
+    id: '91PWKD',
+    message: 'Offer #91PWKD has been placed',
+    date: '18/09/2024',
+    time: '09:30',
+  },
+];
 
-        {/* Vertical Divider */}
-        <View style={styles.divider} />
+const dummySystem = [
+  {
+    title: "Verification Successful!",
+    message:
+      "Verification successful! Your account is fully active and can be used",
+    date: "01/09/2024",
+    time: "13:21",
+  },
+  {
+    title: "Profile update successful!",
+    message: "Profile has been updated, check your profile immediately",
+    date: "01/09/2024",
+    time: "13:21",
+  },
+  {
+    title: "Bank account has been added",
+    message: "Bank accounts can now be used as a transfer destination",
+    date: "02/08/2024",
+    time: "10:56",
+  },
+];
 
-        {/* Actions Section */}
-        <View style={styles.actionsSection}>
-          <View style={styles.actionItem}>
-            <View style={styles.actionIconWrapper}>
-              <Image source={icons.coinInHand} style={styles.actionIcon} />
-            </View>
-            <Text style={styles.actionText}>Cash Out</Text>
-          </View>
-          <View style={styles.actionItem}>
-            <View style={styles.actionIconWrapper}>
-              <Image source={icons.bankBuilding} style={styles.actionIcon} />
-            </View>
-            <Text style={styles.actionText}>Transfer</Text>
-          </View>
-          <View style={styles.actionItem}>
-            <View style={styles.actionIconWrapper}>
-              <Image source={icons.orderHistory} style={styles.actionIcon} />
-            </View>
-            <Text style={styles.actionText}>History</Text>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
+
+const segments = ['Transaction', 'System']
+
+const getTypeColor = (type: string) => {
+  switch (type) {
+    case 'Order': return 'text-green-500';
+    case 'Bill': return 'text-yellow-500';
+    case 'Offer': return 'text-purple-500';
+    default: return 'text-gray-600';
+  }
 };
 
-export default UserBalanceCard;
+const Notification = () => {
+  const insets = useSafeAreaInsets()
+  const handleBack = () => router.push('/')
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    marginHorizontal: 20,
-    padding: 15,
-    borderRadius: 15,
-    elevation: 4,
-    position: "absolute",
-    top: 110,
-    left: 0,
-    right: 0,
-    marginTop: -30,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  balanceSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    gap: 4,
-  },
-  iconWallet: {
-    width: 40,
-    height: 40,
-  },
-  balanceLabel: {
-    fontSize: 12,
-    color: "#1B9C1B",
-    fontWeight: "600",
-  },
-  amountRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  balanceAmount: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  iconEye: {
-    width: 18,
-    height: 18,
-    marginLeft: 3,
-  },
-  divider: {
-    width: 1,
-    height: "100%",
-    backgroundColor: "#ccc",
-    marginHorizontal: 10,
-  },
-  actionsSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  actionItem: {
-    alignItems: "center",
-  },
-  actionIconWrapper: {
-    backgroundColor: "#1B9C1B",
-    padding: 6,
-    borderRadius: 10,
-  },
-  actionIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-  },
-  actionText: {
-    fontSize: 9,
-    fontWeight: "600",
-    color: "#000",
-  },
-});
+  const [type, setType] = useState('Transaction')
+
+  return (
+    <View className='flex-1 bg-white'>
+      <Header title='Notifications' onBack={handleBack}/>
+
+      <ScrollView
+            contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
+      >
+        <Search />
+
+        <View className='items-center mt-2'>
+          <FilterSwitch segments={segments}/>
+        </View>
+
+        <View className='px-5 py-2'>
+          {type === 'Transaction' ?
+            dummyTransactions.map((notif, index) => (
+              <View
+                key={index}
+                className="flex-row justify-between items-center bg-white rounded-2xl p-3 mb-3 shadow-sm border border-gray-200"
+              >
+                {/* Left section: Title + message */}
+                <View className="flex-1">
+                  <View className="flex-row justify-between items-center">
+                    <Text className="font-rubik-semibold">
+                      Incoming{' '}
+                      <Text className={`font-rubik ${getTypeColor(notif.type)}`}>
+                        {notif.type}
+                      </Text>
+                    </Text>
+              
+                    <Text className="font-rubik text-xs text-gray-500 text-right">
+                      {notif.date}, {notif.time}
+                    </Text>
+                  </View>
+              
+                  <Text className="font-rubik text-xs text-gray-700 mt-1">
+                    {notif.message}
+                  </Text>
+                </View>
+              
+                {/* Right section: Action button */}
+                <View className="ml-3 justify-center items-center">
+                  <TouchableOpacity>
+                    <Text className="text-green-700 font-rubik-semibold">Cek</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+          :
+            dummySystem.map((notif, index) => (
+              <View
+                key={index}
+                className="flex-row justify-between items-center bg-white rounded-2xl p-3 mb-3 shadow-sm border border-gray-200"
+              >
+                <View className="flex-1">
+                  <View className="flex-row justify-between items-center">
+                    <Text className="font-rubik-semibold">
+                      {notif.title}
+                    </Text>
+              
+                    <Text className="font-rubik text-xs text-gray-500 text-right">
+                      {notif.date}, {notif.time}
+                    </Text>
+                  </View>
+              
+                  <Text className="font-rubik text-xs text-gray-700 mt-1">
+                    {notif.message}
+                  </Text>
+                </View>
+              </View>
+            ))
+          }
+        </View>
+      </ScrollView>
+    </View>
+  )
+}
+
+export default Notification

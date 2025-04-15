@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import images from '@/constants/images';
 import OrderCard from '@/components/OrderCard';
 import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import Header from '@/components/Header';
 
 const products = [
@@ -13,7 +12,7 @@ const products = [
     items: [
       {
         name: "Non-Stick Pan",
-        price: "Rp 90.000",
+        price: 90000,
         unit: "Pcs",
         sold: 90,
         stock: 20,
@@ -22,7 +21,7 @@ const products = [
       },
       {
         name: "Steel Knife Set",
-        price: "Rp 60.000",
+        price: 60000,
         unit: "Pcs",
         sold: 60,
         stock: 60,
@@ -36,7 +35,7 @@ const products = [
     items: [
       {
         name: "Cooking Oil",
-        price: "Rp 9.000",
+        price: 9000,
         unit: "Liter",
         sold: 345,
         stock: 30,
@@ -45,7 +44,7 @@ const products = [
       },
       {
         name: "Egg",
-        price: "Rp 22.000",
+        price: 22000,
         unit: "Kg",
         sold: 60,
         stock: 30,
@@ -80,7 +79,7 @@ const OrderConfirmation = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Order Confirmation' back={handleBack}/>
+      <Header title='Order Confirmation' onBack={handleBack}/>
       
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

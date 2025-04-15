@@ -2,12 +2,10 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   TouchableOpacity,
   Keyboard,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import icons from "@/constants/icons";
 import images from "@/constants/images";
 import Search from "@/components/Search";
 import { FilterHorizontal } from "@/components/Filter";
@@ -23,7 +21,7 @@ const products = [
     items: [
       {
         name: "Non-Stick Pan",
-        price: "Rp 90.000",
+        price: 90000,
         unit: "Pcs",
         sold: 90,
         stock: 20,
@@ -32,7 +30,7 @@ const products = [
       },
       {
         name: "Steel Knife Set",
-        price: "Rp 60.000",
+        price: 60000,
         unit: "Pcs",
         sold: 60,
         stock: 60,
@@ -46,7 +44,7 @@ const products = [
     items: [
       {
         name: "Cooking Oil",
-        price: "Rp 9.000",
+        price: 9000,
         unit: "Liter",
         sold: 345,
         stock: 30,
@@ -55,7 +53,7 @@ const products = [
       },
       {
         name: "Egg",
-        price: "Rp 22.000",
+        price: 22000,
         unit: "Kg",
         sold: 60,
         stock: 30,
@@ -92,7 +90,7 @@ const Add = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title="Place Order" back={handleBack}/>
+      <Header title="Place Order" onBack={handleBack}/>
       
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

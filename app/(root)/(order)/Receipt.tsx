@@ -35,7 +35,7 @@ const Receipt = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Receipt' back={handleBack}/>
+      <Header title='Receipt' onBack={handleBack}/>
 
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

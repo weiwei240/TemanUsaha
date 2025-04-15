@@ -2,10 +2,11 @@ import { View, Text, ImageSourcePropType, Image, Switch, TouchableOpacity, TextI
 import React, { useState } from 'react'
 import icons from '@/constants/icons';
 import { Ionicons } from '@expo/vector-icons';
+import { formatCurrency } from '@/utils/format';
 
 interface Item {
   name: string;
-  price: string;
+  price: number;
   unit: string;
   sold: number;
   stock: number;
@@ -56,7 +57,7 @@ const OrderCard = ({item, index}: Props) => {
         <View className="flex-1">
           <Text className="text-base font-semibold" numberOfLines={1}>{item.name}</Text>
           <Text className="text-sm text-gray-600" numberOfLines={1}>
-            {item.price} /{" "}
+            {formatCurrency(item.price)} /{" "}
             <Text className="text-xs text-gray-400">{item.unit}</Text>
           </Text>
           <Text className={`text-xs ${quantity === item.stock ? 'text-red-500' : 'text-gray-500'}`}>

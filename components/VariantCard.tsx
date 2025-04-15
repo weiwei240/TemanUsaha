@@ -26,14 +26,14 @@ const VariantCard = ({
       </View>
 
       {/* Info */}
-      <View className='flex-col'>
+      <View className='flex-col flex-1'>
         <View className="flex-1">
           <Text className="font-semibold text-black">{variantName}</Text>
           <Text className="text-gray-500 text-sm">Rp {price}</Text>
         </View>
 
         {/* Buttons */}
-        <View className="flex-row items-center gap-2 ml-2">
+        <View className="flex-row items-center justify-end gap-2 mr-2 mb-2">
           <TouchableOpacity 
             // onPress={onEdit} 
             className="bg-yellow-400 px-3 py-1.5 rounded-md flex-row items-center"

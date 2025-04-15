@@ -1,10 +1,11 @@
 import { View, Text, Image, ImageSourcePropType, Switch, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import icons from '@/constants/icons'
+import { formatCurrency } from '@/utils/format'
 
 interface Item{
   name: string,
-  price: string,
+  price: number,
   unit: string,
   sold: number,
   stock: number,
@@ -31,7 +32,7 @@ const InventoryCard = ({item}: Props) => {
       <View className="flex-1">
         <Text className="text-base font-semibold">{item.name}</Text>
         <Text className="text-sm text-gray-600">
-          {item.price} /{" "}
+          {formatCurrency(item.price)} /{" "}
           <Text className="text-xs text-gray-400">{item.unit}</Text>
         </Text>
         <View className="flex-row items-center gap-3 mt-1">

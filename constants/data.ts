@@ -5,7 +5,7 @@ export const FEATURE_MENUS = [
   { label: "Product", icon: images.product, route: '/Inventory' },
   { label: "Billing", icon: images.billing, route: '/' },
   { label: "Offering", icon: images.offering, route: '/' },
-  { label: "Staff", icon: images.staff, route: '/' },
+  { label: "Staff", icon: images.staff, route: '/Staff' },
   { label: "Customer", icon: images.customer, route: '/' },
 ];
 

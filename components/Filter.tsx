@@ -7,14 +7,14 @@ interface Props{
 }
 
 const FilterDropdown = ({segments}: Props) => {
-  const [selected, setSelected] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   return (
     <View className="flex-row justify-between px-5 py-2 gap-2">
       {segments.map((item, index) => (
         <TouchableOpacity
           key={index}
-          onPress={() => setSelected(index)}
+          onPress={() => setSelectedCategory(index)}
           className={`px-4 py-2 rounded-full border flex-row items-center justify-between gap-2
           border-gray-500"}
         `}
@@ -61,6 +61,31 @@ export const FilterHorizontal = ({segments}: Props) => {
         </TouchableOpacity>
       ))}
     </ScrollView>
+  )
+}
+
+export const FilterSwitch = ({segments}: Props) => {
+  const [selectedCategory, setSelectedCategory] = useState(segments[0]);
+
+  const handleCategoryPress = (category:string) => {
+    setSelectedCategory(category);
+    return;
+  }
+  
+  return (
+    <View className='flex-row py-2 ml-2 mr-5 justify-center items-center bg-green-600 rounded-full'>
+      {segments.map((item, index) => (
+        <TouchableOpacity 
+          key={index}
+          onPress={() => handleCategoryPress(item)}
+          className={`flex flex-col ml-2 mr-2 px-8 rounded-full items-center ${
+            selectedCategory === item ? 'bg-white' : 'bg-green-600'
+          }`}
+        >
+          <Text className={`text-sm mt-1 font-rubik ${selectedCategory === item ? 'text-green-600' : 'text-white'}`}>{item}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
   )
 }
 

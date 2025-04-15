@@ -17,7 +17,7 @@ const PaymentMethods = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Payment Methods' back={handleBack}/>
+      <Header title='Payment Methods' onBack={handleBack}/>
 
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

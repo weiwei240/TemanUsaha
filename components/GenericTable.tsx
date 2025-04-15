@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Image, ImageSourcePropType } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { DataTable, Text } from 'react-native-paper';
-import images from '@/constants/images';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export interface Column<T> {
   key: keyof T;
   label: string;
   sortable?: boolean;
-  flex?: number;
+  width?: number;
+  render?: (row: T) => React.ReactNode;
 }
 
 interface Props<T>{
@@ -45,32 +46,85 @@ function GenericTable<T extends object>({ itemData, columns }: Props<T>) {
   });
 
   return (
-    <DataTable>
-      <DataTable.Header>
-        {columns.map((col) => (
-          <DataTable.Title
-            key={String(col.key)}
-            sortDirection={sortColumn === col.key ? (ascending ? 'ascending' : 'descending') : undefined}
-            onPress={() => col.sortable && handleSort(col.key as keyof T)}
-            style={{ flex: col.flex ?? 1 }}
-          >
-            {col.label}
-          </DataTable.Title>
-        ))}
-      </DataTable.Header>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View
+        style={{
+          borderRadius: 12,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: '#d1fae5', // Tailwind green-100
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOpacity: 0.05,
+          shadowOffset: { width: 0, height: 1 },
+          shadowRadius: 3,
+        }}
+      >
+        <DataTable style={{ backgroundColor: 'white' }}>
+          <DataTable.Header>
+            {columns.map((col) => (
+              <DataTable.Title
+                key={String(col.key)}
+                style={{ width: col.width ?? 100, paddingVertical: 8, paddingHorizontal: 4 }}
+                onPress={() => col.sortable && handleSort(col.key as keyof T)}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{
+                    color: sortColumn === col.key ? 'green' : 'black',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                    marginRight: 4,
+                  }}>
+                    {col.label}
+                  </Text>
 
-      {sortedData.map((item, index) => (
-        <DataTable.Row key={index}>
-          {columns.map((col, i) => (
-            <DataTable.Cell key={i} style={{ flex: col.flex ?? 1 }}>
-              <Text>
-                {String(item[col.key as keyof T])}
-              </Text>
-            </DataTable.Cell>
+                  {/* Reserve space for the arrow */}
+                  <View style={{ width: 12, alignItems: 'center' }}>
+                    {sortColumn === col.key && (
+                      <Ionicons
+                        name={ascending ? 'caret-down' : 'caret-up'}
+                        size={12}
+                        color="green"
+                      />
+                    )}
+                  </View>
+                </View>
+              </DataTable.Title>
+            ))}
+          </DataTable.Header>
+
+          {sortedData.map((item, index) => (
+            <DataTable.Row
+            key={index}
+            style={{
+              backgroundColor: 'white',
+              borderBottomWidth: 1,
+              borderColor: '#e2e8f0', // Tailwind gray-200
+            }}
+          >
+            {columns.map((col, colIndex) => (
+              <DataTable.Cell
+                key={colIndex}
+                style={{
+                  width: col.width ?? 100,
+                  paddingVertical: 6,
+                  paddingHorizontal: 4,
+                }}
+              >
+                {col.render ? (
+                  col.render(item)
+                ) : (
+                  <Text style={{ color: '#1f2937', fontSize: 12 }}>
+                    {String(item[col.key])}
+                  </Text>
+                )}
+              </DataTable.Cell>
+            ))}
+          </DataTable.Row>
           ))}
-        </DataTable.Row>
-      ))}
-    </DataTable>
+        </DataTable>
+      </View>
+    </ScrollView>
   );
 }
 

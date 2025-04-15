@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import icons from "@/constants/icons";
 
 const UserBalanceCard = () => {
@@ -29,34 +29,34 @@ const UserBalanceCard = () => {
 
         {/* Actions Section */}
         <View className="flex-row items-center gap-2">
-          <View className="items-center">
+          <TouchableOpacity className="items-center">
             <View className="bg-green-700 p-1.5 rounded-xl">
-              <Image source={icons.coinInHand} className="w-6 h-6 rounded-md" />
+              <Image source={icons.coinInHand} className="w-8 h-8 rounded-md" />
             </View>
             <Text className="text-[9px] font-semibold text-black">
               Cash Out
             </Text>
-          </View>
-          <View className="items-center">
+          </TouchableOpacity>
+          <TouchableOpacity className="items-center">
             <View className="bg-green-700 p-1.5 rounded-xl">
               <Image
                 source={icons.bankBuilding}
-                className="w-6 h-6 rounded-md"
+                className="w-8 h-8 rounded-md"
               />
             </View>
             <Text className="text-[9px] font-semibold text-black">
               Transfer
             </Text>
-          </View>
-          <View className="items-center">
+          </TouchableOpacity>
+          <TouchableOpacity className="items-center">
             <View className="bg-green-700 p-1.5 rounded-xl">
               <Image
                 source={icons.orderHistory}
-                className="w-6 h-6 rounded-md"
+                className="w-8 h-8 rounded-md"
               />
             </View>
             <Text className="text-[9px] font-semibold text-black">History</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
