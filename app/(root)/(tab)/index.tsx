@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import UserBalanceCard from "@/components/BalanceCard";
 import { FeatureMenu } from "@/components/FeatureMenu";
 import FinancialReportCard from "@/components/FinancialReport";
 import icons from "@/constants/icons";
+import { router } from "expo-router";
 
 export default function Home() {
   const insets = useSafeAreaInsets();
+  const handleSettings = () => router.push('/Settings')
 
   const dummyArticles = [
     {
@@ -37,14 +39,18 @@ export default function Home() {
               <Text className="text-white text-xl font-rubik-bold">
                 Pelita Jaya Store
               </Text>
-              <Text className="text-white text-sm font-rubik">
-                Edit Profile ✏️
-              </Text>
+              <TouchableOpacity onPress={handleSettings}>
+                <Text className="text-white text-sm font-rubik">
+                  Edit Profile ✏️
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View className="flex-row gap-3">
             <Image source={icons.share} className="size-6" />
-            <Image source={icons.settings} className="size-6" />
+            <TouchableOpacity onPress={handleSettings}>
+              <Image source={icons.settings} className="size-6" />
+            </TouchableOpacity>
           </View>
         </View>
 

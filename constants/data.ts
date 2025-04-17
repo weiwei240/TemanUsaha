@@ -6,7 +6,7 @@ export const FEATURE_MENUS = [
   { label: "Billing", icon: images.billing, route: '/' },
   { label: "Offering", icon: images.offering, route: '/' },
   { label: "Staff", icon: images.staff, route: '/Staff' },
-  { label: "Customer", icon: images.customer, route: '/' },
+  { label: "Customer", icon: images.customer, route: '/Customer' },
 ];
 
 export const cards = [

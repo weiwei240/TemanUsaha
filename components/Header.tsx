@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
   },  
   headerWhite: {
     backgroundColor: 'white',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
 });
 

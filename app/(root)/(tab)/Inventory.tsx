@@ -78,7 +78,7 @@ export default function Inventory() {
       contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
     >
       {/* Header */}
-      <Header title="Inventory" onBack={handleBack} onAdd={handleCreateProduct}/>
+      <Header title="Inventory Management" onBack={handleBack} onAdd={handleCreateProduct}/>
 
       {/* Tabs */}
       <View className="flex-row px-5 pt-2 gap-3 mb-2">
