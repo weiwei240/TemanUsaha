@@ -5,18 +5,20 @@ import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import images from '@/constants/images'
+import { formatCurrency } from '@/utils/format'
+import { useOrderContext } from '@/context/OrderContext'
 
-const items = [
-  { name: 'Non-Stick Pan', qty: 1, price: 'Rp 90.000' },
-  { name: 'Steel Knife Set', qty: 1, price: 'Rp 60.000' },
-  { name: 'Egg', qty: 1, price: 'Rp 22.000' },
-]
+// const items = [
+//   { name: 'Non-Stick Pan', qty: 1, price: 'Rp 90.000' },
+//   { name: 'Steel Knife Set', qty: 1, price: 'Rp 60.000' },
+//   { name: 'Egg', qty: 1, price: 'Rp 22.000' },
+// ]
 
 const Receipt = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/')
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
+  const {items, setItems, totalPrice, transactionTime} = useOrderContext()
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -31,6 +33,11 @@ const Receipt = () => {
       hideSubscription.remove()
     }
   }, [])
+
+  const handleBack = () => {
+    setItems([])
+    router.push('/')
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -60,7 +67,7 @@ const Receipt = () => {
                 className="w-16 h-16 rounded-full mb-1"
               />
               <Text className="text-lg font-rubik-bold">Jus Jeruk</Text>
-              <Text className="text-xs text-gray-500 font-rubik mt-1">17 Aug 2024, 14:50 PM</Text>
+              <Text className="text-xs text-gray-500 font-rubik mt-1">{transactionTime}</Text>
             </View>
 
             <View className="border-b border-green-500 my-4" />
@@ -68,7 +75,7 @@ const Receipt = () => {
             {/* Payment Summary */}
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-base font-rubik-bold">Total Payment</Text>
-              <Text className="text-base font-rubik-bold">Rp 177.000</Text>
+              <Text className="text-base font-rubik-bold">{formatCurrency(totalPrice)}</Text>
             </View>
 
             {/* Item List */}
@@ -76,7 +83,7 @@ const Receipt = () => {
               <View key={index} className="flex-row justify-between mb-1">
                 <Text className="flex-1 text-sm">{item.name}</Text>
                 <Text className="w-8 text-sm text-center">x {item.qty}</Text>
-                <Text className="w-20 text-right text-sm">{item.price}</Text>
+                <Text className="w-20 text-right text-sm">{formatCurrency(item.price)}</Text>
               </View>
             ))}
 

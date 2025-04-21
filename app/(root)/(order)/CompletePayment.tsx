@@ -4,11 +4,22 @@ import Header from '@/components/shared/Header'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import images from '@/constants/images'
+import { useOrderContext } from '@/context/OrderContext'
+import { formatCurrency } from '@/utils/format'
 
 const CompletePayment = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/PaymentMethods')
-  const handleCheckReceipt = () => router.push('/Receipt')
+  
+  const {totalPrice, setTransactionTime} = useOrderContext()
+  const handleCheckReceipt = () => {
+    const now = new Date();
+    const formatted = now.toLocaleString('id-ID', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+    router.push('/Receipt')
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -23,7 +34,7 @@ const CompletePayment = () => {
           <Text className='w-2/3 text-center mt-2 font-rubik'>Scan this QR Code to complete the payment</Text>
           <Text className='text-2xl font-rubik-bold py-6'>Jus Jeruk</Text>
           <Image source={images.qrcode}/>
-          <Text className='text-3xl font-rubik-bold py-6'>Rp 177.000</Text>
+          <Text className='text-3xl font-rubik-bold py-6'>{formatCurrency(totalPrice)}</Text>
         </View>
       </ScrollView>
 

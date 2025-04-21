@@ -1,9 +1,11 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import Header from '@/components/shared/Header'
+import { useOrderContext } from '@/context/OrderContext'
+import { formatCurrency } from '@/utils/format'
 
 const options = ["Cash", "Bank Transfer", "Debit Card", "Others"]
 
@@ -12,7 +14,8 @@ const PaymentMethods = () => {
   const handleBack = () => router.push('/OrderConfirmation')
   const handleConfirmPayment = () => router.push('/CompletePayment')
 
-  const [selected, setSeleceted] = useState('QRIS')
+  const { paymentMethod, setPaymentMethod, totalPrice} = useOrderContext()
+  // const [selected, setSelected] = useState(paymentMethod)
 
   return (
     <View className="flex-1 bg-white">
@@ -27,7 +30,7 @@ const PaymentMethods = () => {
           <View className="flex flex-row items-center justify-between mt-2 mb-2">
             <Text className='text-xl font-rubik-semibold'>Total Payment</Text>
             <TouchableOpacity onPress={() => handleBack()}>
-              <Text className="text-xl font-rubik-bold">Rp 177.000</Text>
+              <Text className="text-xl font-rubik-bold">{formatCurrency(totalPrice)}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -43,11 +46,11 @@ const PaymentMethods = () => {
           
           {/* Options */}
           <TouchableOpacity
-            className={`flex flex-row border rounded-xl items-center p-4 w-2/3 mt-2 mb-2 ${selected === 'QRIS' ? 'border-green-600 bg-green-600' : ''}`}
-            onPress={() => setSeleceted('QRIS')}
+            className={`flex flex-row border rounded-xl items-center p-4 w-2/3 mt-2 mb-2 ${paymentMethod === 'QRIS' ? 'border-green-600 bg-green-600' : ''}`}
+            onPress={() => setPaymentMethod('QRIS')}
           >
-            <Ionicons name='qr-code-outline' size={32} color={`${selected === 'QRIS' ? 'white' : 'black'}`}/>
-            <Text className={`text-2xl font-rubik-semibold ml-4 ${selected === 'QRIS' ? 'text-white' : 'text-black'}`}>QRIS</Text>
+            <Ionicons name='qr-code-outline' size={32} color={`${paymentMethod === 'QRIS' ? 'white' : 'black'}`}/>
+            <Text className={`text-2xl font-rubik-semibold ml-4 ${paymentMethod === 'QRIS' ? 'text-white' : 'text-black'}`}>QRIS</Text>
           </TouchableOpacity>
 
           <Text className='text-lg mt-4 font-rubik'>Other payment methods?</Text>
@@ -55,10 +58,10 @@ const PaymentMethods = () => {
           {options.map((option) => (
             <TouchableOpacity
               key={option}
-              className={`flex flex-row border rounded-xl items-center p-4 w-2/3 mt-2 mb-2 ${selected === option ? 'border-green-600 bg-green-600' : ''}`}
-              onPress={() => setSeleceted(option)}
+              className={`flex flex-row border rounded-xl items-center p-4 w-2/3 mt-2 mb-2 ${paymentMethod === option ? 'border-green-600 bg-green-600' : ''}`}
+              onPress={() => setPaymentMethod(option)}
             >
-              <Text className={`text-2xl font-rubik-semibold ml-4 ${selected === option ? 'text-white' : 'text-black'}`}>{option}</Text>
+              <Text className={`text-2xl font-rubik-semibold ml-4 ${paymentMethod === option ? 'text-white' : 'text-black'}`}>{option}</Text>
             </TouchableOpacity>
           ))}
         </View>

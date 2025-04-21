@@ -1,32 +1,33 @@
 import { View, Text, ImageSourcePropType, Image, Switch, TouchableOpacity, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import icons from '@/constants/icons';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '@/utils/format';
-
-interface Item {
-  name: string;
-  price: number;
-  unit: string;
-  sold: number;
-  stock: number;
-  image: ImageSourcePropType;
-}
+import { OrderItem } from '@/types/types';
 
 interface Props{
-  item: Item;
+  item: OrderItem;
   index: number;
+  onQuantityChange: (qty: number) => void;
 }
 
-const OrderCard = ({item, index}: Props) => {
-  const [quantity, setQuantity] = useState(0);
+const OrderCard = ({item, index, onQuantityChange}: Props) => {
+  const [quantity, setQuantity] = useState(item.qty ?? 0);
   const [isFocused, setIsFocused] = useState(false);
 
   const increase = () => {
-    if(quantity < item.stock) setQuantity((prev) => prev + 1);
+    if(quantity < item.stock){
+      const newQty = quantity + 1
+      setQuantity(newQty);
+      onQuantityChange(newQty)
+    }
   };
   const decrease = () => {
-    if(quantity > 0) setQuantity((prev) => prev - 1);
+    if(quantity > 0){
+      const newQty = quantity - 1
+      setQuantity(newQty);
+      onQuantityChange(newQty);
+    }
   };
 
   const handleInputChange = (text: string) => {
@@ -34,13 +35,20 @@ const OrderCard = ({item, index}: Props) => {
     if (!isNaN(num)) {
       if (num > item.stock) {
         setQuantity(item.stock);
+        onQuantityChange(item.stock);
       } else if (num >= 0) {
         setQuantity(num);
+        onQuantityChange(num);
       }
     } else if (text === '') {
       setQuantity(0);
+      onQuantityChange(0);
     }
   };
+
+  useEffect(() => {
+    setQuantity(item.qty ?? 0);
+  }, [item.qty]);
 
   return (
     // <View className='px-5 pt-2'>

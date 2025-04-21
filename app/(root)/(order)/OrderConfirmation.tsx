@@ -1,66 +1,36 @@
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import images from '@/constants/images';
 import OrderCard from '@/components/screens/OrderCard';
 import { router } from 'expo-router';
 import Header from '@/components/shared/Header';
-
-const products = [
-  {
-    category: "Kitchen Appliances",
-    items: [
-      {
-        name: "Non-Stick Pan",
-        price: 90000,
-        unit: "Pcs",
-        sold: 90,
-        stock: 20,
-        image: images.pan,
-        active: true,
-      },
-      {
-        name: "Steel Knife Set",
-        price: 60000,
-        unit: "Pcs",
-        sold: 60,
-        stock: 60,
-        image: images.kitchen,
-        active: true,
-      },
-    ],
-  },
-  {
-    category: "Daily Necessities",
-    items: [
-      {
-        name: "Cooking Oil",
-        price: 9000,
-        unit: "Liter",
-        sold: 345,
-        stock: 30,
-        image: images.fruit,
-        active: true,
-      },
-      {
-        name: "Egg",
-        price: 22000,
-        unit: "Kg",
-        sold: 60,
-        stock: 30,
-        image: images.egg,
-        active: true,
-      },
-    ],
-  },
-];
+import { useOrderContext } from '@/context/OrderContext';
+import { formatCurrency } from '@/utils/format';
 
 const OrderConfirmation = () => {
   const insets = useSafeAreaInsets();
   const handleBack = () => router.push('/Add')
-  const handlePlaceOrder = () => router.push('/PaymentMethods')
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
+
+    const { items, setItems, totalPrice } = useOrderContext();
+    
+    const handleQuantityChange = (product: any, quantity: number) => {
+      if (quantity === 0) {
+        setItems((prev) => prev.filter((item) => item.name !== product.name));
+      } else {
+        setItems((prev) => {
+          const existing = prev.find((item) => item.name === product.name);
+          if (existing) {
+            return prev.map((item) =>
+              item.name === product.name ? { ...item, qty: quantity } : item
+          );
+        } else {
+          return [...prev, { ...product, qty: quantity }];
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -75,6 +45,10 @@ const OrderConfirmation = () => {
       hideSubscription.remove()
     }
   }, [])
+
+  const handlePlaceOrder = () => {
+    router.push('/PaymentMethods')
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -92,11 +66,14 @@ const OrderConfirmation = () => {
               <Text className="text-base font-rubik text-green-400">Add Items</Text>
             </TouchableOpacity>
           </View>
-          {products.map((section) => 
+          {/* {products.map((section) => 
               section.items.map((item, i) => (
-                <OrderCard key={i} item={item} index={i}/>
+                <OrderCard key={i} item={item} index={i} onQuantityChange={(qty) => handleQuantityChange(item, qty)}/>
               ))
-          )}
+          )} */}
+          {items.map((item, i) => (
+            <OrderCard key={i} item={item} index={i} onQuantityChange={(qty) => handleQuantityChange(item, qty)}/>
+          ))}
         </View>
 
         {/* Payment Summary */}
@@ -107,7 +84,7 @@ const OrderConfirmation = () => {
           <View className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 space-y-2">
             <View className="flex-row justify-between">
               <Text className="text-base text-gray-600 font-rubik">Subtotal</Text>
-              <Text className="text-base text-gray-800 font-rubik">Rp 172.000</Text>
+              <Text className="text-base text-gray-800 font-rubik">{formatCurrency(totalPrice)}</Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base text-gray-600 font-rubik">Order fee</Text>
@@ -116,7 +93,7 @@ const OrderConfirmation = () => {
             <View className="h-px bg-gray-200 my-2" />
             <View className="flex-row justify-between">
               <Text className="text-base font-rubik-bold">Total payment</Text>
-              <Text className="text-base font-rubik-bold">Rp 177.000</Text>
+              <Text className="text-base font-rubik-bold">{formatCurrency(totalPrice + 5000)}</Text>
             </View>
           </View>
         </View>
@@ -155,7 +132,7 @@ const OrderConfirmation = () => {
           <View className='flex flex-col items-center'>
             <View className='flex flex-row items-start justify-between w-full px-5 pt-2'>
               <Text className='text-base font-rubik-medium'>Total</Text>
-              <Text className='text-base text-start font-rubik-bold'>Rp 177.000</Text>
+              <Text className='text-base text-start font-rubik-bold'>{formatCurrency(totalPrice + 5000)}</Text>
             </View>
             <View className='px-5 py-2 w-full'>
               <TouchableOpacity

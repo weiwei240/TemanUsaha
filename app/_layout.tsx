@@ -2,8 +2,9 @@ import { SplashScreen, Stack } from "expo-router";
 import "./globals.css";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-
 import { SafeAreaView, StatusBar } from "react-native";
+
+import { OrderProvider } from "@/context/OrderContext";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -31,7 +32,9 @@ export default function RootLayout() {
         backgroundColor="green"
         barStyle="light-content" // use 'dark-content' for light backgrounds
       />
-      <Stack screenOptions={{ headerShown: false }} />
+      <OrderProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </OrderProvider>
     </SafeAreaView>
   );
 }
