@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import ImageUploader from './ImageUploader'
+import ImageUploader from './shared/ImageUploader'
 
 interface Props {
   variantName?: string

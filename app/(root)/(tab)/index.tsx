@@ -1,9 +1,9 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import images from "@/constants/images";
-import UserBalanceCard from "@/components/BalanceCard";
-import { FeatureMenu } from "@/components/FeatureMenu";
-import FinancialReportCard from "@/components/FinancialReport";
+import UserBalanceCard from "@/components/screens/BalanceCard";
+import { FeatureMenu } from "@/components/screens/FeatureMenu";
+import FinancialReportCard from "@/components/screens/FinancialReport";
 import icons from "@/constants/icons";
 import { router } from "expo-router";
 

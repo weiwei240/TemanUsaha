@@ -1,14 +1,14 @@
 import { View, Text, ScrollView, Image, ImageSourcePropType, TouchableOpacity } from 'react-native'
 import React from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import GenericTable from '@/components/GenericTable'
-import images from '@/constants/images'
-import Search from '@/components/Search'
-import FilterDropdown from '@/components/Filter'
-import { Column } from '@/components/GenericTable'
+import GenericTable from '@/components/shared/GenericTable'
+import Search from '@/components/shared/Search'
+import FilterDropdown from '@/components/shared/Filter'
+import { Column } from '@/components/shared/GenericTable'
 import { formatCurrency } from '@/utils/format'
+import { featured } from '@/data/dummy'
 
 interface ItemFeatured {
   name: string;
@@ -46,37 +46,6 @@ const featuredColumns: Column<ItemFeatured>[] = [
   { key: 'sold', label: 'Sold', sortable: true, width: 60 },
 ];
 
-const featuredData = [
-  {
-    name: 'Non-Stick Pan',
-    image: images.pan,
-    price: 90000,
-    stock: 2,
-    sold: 90,
-  },
-  {
-    name: 'Egg',
-    image: images.egg,
-    price: 22000,
-    stock: 30,
-    sold: 100,
-  },
-  {
-    name: 'Test',
-    image: images.newYork,
-    price: 56000,
-    stock: 15,
-    sold: 70,
-  },
-  {
-    name: 'Abcde',
-    image: images.avatar,
-    price: 12000,
-    stock: 10,
-    sold: 50,
-  },
-]
-
 const segments = ["All Categories", "Sort By", "Status"];
 
 const Featured = () => {
@@ -94,7 +63,7 @@ const Featured = () => {
         <FilterDropdown segments={segments}/>
 
         <View className='px-5 py-2'>
-          <GenericTable<ItemFeatured> itemData={featuredData} columns={featuredColumns} />
+          <GenericTable<ItemFeatured> itemData={featured} columns={featuredColumns} />
         </View>
       </ScrollView>
       <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>

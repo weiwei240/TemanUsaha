@@ -1,64 +1,11 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import Search from '@/components/Search'
-import { FilterSwitch } from '@/components/Filter'
-
-const dummyTransactions = [
-  {
-    type: 'Order',
-    id: '24SEAA',
-    message: 'Order #24SEAA has been paid for Rp 85.100',
-    date: '21/09/2024',
-    time: '18:42',
-  },
-  {
-    type: 'Bill',
-    id: '83GASW',
-    message: 'Bill #83GASW has been paid for Rp 190.000',
-    date: '20/09/2024',
-    time: '13:21',
-  },
-  {
-    type: 'Bill',
-    id: '71KJAL',
-    message: 'Bill #71KJAL has been paid for Rp 38.400',
-    date: '18/09/2024',
-    time: '10:06',
-  },
-  {
-    type: 'Offer',
-    id: '91PWKD',
-    message: 'Offer #91PWKD has been placed',
-    date: '18/09/2024',
-    time: '09:30',
-  },
-];
-
-const dummySystem = [
-  {
-    title: "Verification Successful!",
-    message:
-      "Verification successful! Your account is fully active and can be used",
-    date: "01/09/2024",
-    time: "13:21",
-  },
-  {
-    title: "Profile update successful!",
-    message: "Profile has been updated, check your profile immediately",
-    date: "01/09/2024",
-    time: "13:21",
-  },
-  {
-    title: "Bank account has been added",
-    message: "Bank accounts can now be used as a transfer destination",
-    date: "02/08/2024",
-    time: "10:56",
-  },
-];
-
+import Search from '@/components/shared/Search'
+import { FilterSwitch } from '@/components/shared/Filter'
+import { dummySystem, dummyTransactions } from '@/data/dummy'
 
 const segments = ['Transaction', 'System']
 

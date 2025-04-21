@@ -6,63 +6,14 @@ import {
   Keyboard,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import images from "@/constants/images";
-import Search from "@/components/Search";
-import { FilterHorizontal } from "@/components/Filter";
-import OrderCard from "@/components/OrderCard";
+import Search from "@/components/shared/Search";
+import { FilterHorizontal } from "@/components/shared/Filter";
+import OrderCard from "@/components/screens/OrderCard";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import Header from "@/components/Header";
+import Header from "@/components/shared/Header";
 import { useEffect, useState } from "react";
-
-const products = [
-  {
-    category: "Kitchen Appliances",
-    items: [
-      {
-        name: "Non-Stick Pan",
-        price: 90000,
-        unit: "Pcs",
-        sold: 90,
-        stock: 20,
-        image: images.pan,
-        active: true,
-      },
-      {
-        name: "Steel Knife Set",
-        price: 60000,
-        unit: "Pcs",
-        sold: 60,
-        stock: 60,
-        image: images.kitchen,
-        active: true,
-      },
-    ],
-  },
-  {
-    category: "Daily Necessities",
-    items: [
-      {
-        name: "Cooking Oil",
-        price: 9000,
-        unit: "Liter",
-        sold: 345,
-        stock: 30,
-        image: images.fruit,
-        active: true,
-      },
-      {
-        name: "Egg",
-        price: 22000,
-        unit: "Kg",
-        sold: 60,
-        stock: 30,
-        image: images.egg,
-        active: true,
-      },
-    ],
-  },
-];
+import { products } from "@/data/dummy";
 
 const segments = ["All", "Category 1", "Category 2", "Category 3", "Category 4", "Category 5"];
 

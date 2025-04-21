@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import icons from "@/constants/icons";
+import { router } from "expo-router";
 
 const UserBalanceCard = () => {
+  const handleHistory = () => router.push('/TransactionHistory')
+
   return (
     <View className="bg-white mx-5 p-4 rounded-2xl shadow-lg mt-[-40px]">
       <View className="flex-row items-center">
@@ -48,7 +51,7 @@ const UserBalanceCard = () => {
               Transfer
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className="items-center">
+          <TouchableOpacity className="items-center" onPress={handleHistory}>
             <View className="bg-green-700 p-1.5 rounded-xl">
               <Image
                 source={icons.orderHistory}

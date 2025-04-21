@@ -1,74 +1,16 @@
-import { View, Text, ScrollView, SectionList } from 'react-native'
+import { View, Text, SectionList } from 'react-native'
 import React from 'react'
-import Header from '@/components/Header';
+import Header from '@/components/shared/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { formatCurrency } from '@/utils/format';
 import { Ionicons } from '@expo/vector-icons';
-
-const customers = [
-  {
-    id: '1',
-    name: 'Megawanto',
-    phone: '081234567890',
-    totalSpending: 100_000_000,
-    transactions: 28,
-  },
-  {
-    id: '2',
-    name: 'Elianna',
-    phone: '081234567891',
-    totalSpending: 80_000_000,
-    transactions: 20,
-  },
-  {
-    id: '3',
-    name: 'Susanto',
-    phone: '081234567892',
-    totalSpending: 65_000_000,
-    transactions: 18,
-  },
-  {
-    id: '4',
-    name: 'Adi',
-    phone: '081234567893',
-    totalSpending: 10_000_000,
-    transactions: 6,
-  },
-  {
-    id: '5',
-    name: 'Bima',
-    phone: '081234567894',
-    totalSpending: 15_000_000,
-    transactions: 7,
-  },
-  {
-    id: '6',
-    name: 'Anna',
-    phone: '081234567895',
-    totalSpending: 18_000_000,
-    transactions: 8,
-  },
-  {
-    id: '7',
-    name: 'Aron',
-    phone: '081234567896',
-    totalSpending: 25_000_000,
-    transactions: 12,
-  },
-  {
-    id: '8',
-    name: 'Cassandra',
-    phone: '081234567897',
-    totalSpending: 12_000_000,
-    transactions: 5,
-  },
-];
+import { customers } from '@/data/dummy'
 
 const Customer = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/')
-  const handleAddCustomer = () => router.push('/')
+  const handleAddCustomer = () => router.push('/AddCustomer')
 
   const sortedCustomers = [...customers].sort((a, b) => b.totalSpending - a.totalSpending)
   const topCustomers = sortedCustomers.slice(0, 3);

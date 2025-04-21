@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'

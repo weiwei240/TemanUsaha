@@ -7,61 +7,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import icons from "@/constants/icons";
-import images from "@/constants/images";
-import Search from "@/components/Search";
-import FilterDropdown from "@/components/Filter";
-import InventoryCard from "@/components/InventoryCard";
+import Search from "@/components/shared/Search";
+import FilterDropdown from "@/components/shared/Filter";
+import InventoryCard from "@/components/screens/InventoryCard";
 import { router } from "expo-router";
-import Header from "@/components/Header";
-
-const products = [
-  {
-    category: "Kitchen Appliances",
-    items: [
-      {
-        name: "Non-Stick Pan",
-        price: 90000,
-        unit: "Pcs",
-        sold: 90,
-        stock: 20,
-        image: images.pan,
-        active: true,
-      },
-      {
-        name: "Steel Knife Set",
-        price: 60000,
-        unit: "Pcs",
-        sold: 60,
-        stock: 60,
-        image: images.kitchen,
-        active: true,
-      },
-    ],
-  },
-  {
-    category: "Daily Necessities",
-    items: [
-      {
-        name: "Cooking Oil",
-        price: 9000,
-        unit: "Liter",
-        sold: 345,
-        stock: 30,
-        image: images.fruit,
-        active: true,
-      },
-      {
-        name: "Egg",
-        price: 22000,
-        unit: "Kg",
-        sold: 60,
-        stock: 30,
-        image: images.egg,
-        active: true,
-      },
-    ],
-  },
-];
+import Header from "@/components/shared/Header";
+import { products } from "@/data/dummy";
 
 const segments = ["All Categories", "Sort By", "Status"];
 

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 
 const options = ["Cash", "Bank Transfer", "Debit Card", "Others"]
 

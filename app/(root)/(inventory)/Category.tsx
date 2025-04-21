@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, Image, ImageSourcePropType, TouchableOpacity } from 'react-native'
 import React from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import images from '@/constants/images'
-import GenericTable from '@/components/GenericTable'
-import Search from '@/components/Search'
-import { Column } from '@/components/GenericTable'
+import GenericTable from '@/components/shared/GenericTable'
+import Search from '@/components/shared/Search'
+import { Column } from '@/components/shared/GenericTable'
+import { categories } from '@/data/dummy'
 
 interface ItemCategory {
   name: string;
@@ -32,21 +32,6 @@ const categoryColumns: Column<ItemCategory>[] = [
   { key: 'dateModified', label: 'Date Modified', sortable: true, width: 120 },
 ];
 
-const categoryData = [
-  {
-    name: 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z',
-    image: images.kitchen,
-    itemCount: 2,
-    dateModified: '2 days ago',
-  },
-  {
-    name: 'Daily Necessities',
-    image: images.daily,
-    itemCount: 2,
-    dateModified: '2 days ago',
-  },
-]
-
 const Category = () => {
   const insets = useSafeAreaInsets()
   const handleBack = () => router.push('/Inventory')
@@ -60,7 +45,7 @@ const Category = () => {
       >
           <Search />
           <View className='px-5 py-2'>
-            <GenericTable<ItemCategory> itemData={categoryData} columns={categoryColumns} />
+            <GenericTable<ItemCategory> itemData={categories} columns={categoryColumns} />
           </View>
       </ScrollView>
       <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>

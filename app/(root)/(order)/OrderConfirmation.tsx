@@ -2,9 +2,9 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Keyboard } from 'r
 import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import images from '@/constants/images';
-import OrderCard from '@/components/OrderCard';
+import OrderCard from '@/components/screens/OrderCard';
 import { router } from 'expo-router';
-import Header from '@/components/Header';
+import Header from '@/components/shared/Header';
 
 const products = [
   {

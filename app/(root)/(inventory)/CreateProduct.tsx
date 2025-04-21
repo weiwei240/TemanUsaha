@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import FormField from '@/components/FormField'
-import ImageUploader from '@/components/ImageUploader'
-import VariantCard from '@/components/VariantCard'
+import FormField from '@/components/shared/FormField'
+import ImageUploader from '@/components/shared/ImageUploader'
+import VariantCard from '@/components/screens/VariantCard'
 
 const CreateProduct = () => {
   const insets = useSafeAreaInsets()
