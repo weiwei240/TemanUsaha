@@ -4,7 +4,31 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { SafeAreaView, StatusBar } from "react-native";
 
-import { OrderProvider } from "@/context/OrderContext";
+import { OrderProvider, useOrder } from "@/context/OrderContext";
+import { orderPages } from "@/constants/data";
+import { useAutoResetOnExit } from "@/hooks/useAutoResetOnExit";
+import { useOrderFlow } from "@/hooks/useOrderFlow";
+
+function InnerLayout() {
+  const { orderInProgress, resetOrder } = useOrder();
+
+  useOrderFlow(orderPages);
+
+  useAutoResetOnExit(orderPages, () => {
+    if (orderInProgress) resetOrder();
+  });
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "green" }}>
+      <StatusBar
+        translucent
+        backgroundColor="green"
+        barStyle="light-content" // use 'dark-content' for light backgrounds
+      />
+      <Stack screenOptions={{ headerShown: false }} />
+    </SafeAreaView>
+  )
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -25,16 +49,10 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "green" }}>
-      <StatusBar
-        translucent
-        backgroundColor="green"
-        barStyle="light-content" // use 'dark-content' for light backgrounds
-      />
-      <OrderProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </OrderProvider>
-    </SafeAreaView>
+    <OrderProvider>
+      <InnerLayout />
+    </OrderProvider>
   );
 }

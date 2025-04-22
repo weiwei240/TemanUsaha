@@ -10,20 +10,21 @@ import Search from "@/components/shared/Search";
 import { FilterHorizontal } from "@/components/shared/Filter";
 import OrderCard from "@/components/screens/OrderCard";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import Header from "@/components/shared/Header";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { products } from "@/data/dummy";
-import { useOrderContext } from "@/context/OrderContext";
+import { useOrder } from "@/context/OrderContext";
 import { formatCurrency } from "@/utils/format";
 import { Product, OrderItem } from "@/types/types";
+import React from "react";
 
 const segments = ["All", "Category 1", "Category 2", "Category 3", "Category 4", "Category 5"];
 
 const Add = () => {
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false)
-  const { items, setItems, totalPrice, totalItems } = useOrderContext();
+  const { items, setItems, totalPrice, totalItems, setOrderInProgress } = useOrder();
   
   const handleQuantityChange = (product: Product, quantity: number) => {
     if (quantity === 0) {
@@ -44,10 +45,14 @@ const Add = () => {
     }
   };
   
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setOrderInProgress(true);
+  //   }, [])
+  // );
 
   const handleCartPress = () => router.push('/OrderConfirmation')
   const handleBack = () => {
-    setItems([])
     router.push('/')
   }
 

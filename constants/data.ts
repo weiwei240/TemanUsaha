@@ -9,6 +9,14 @@ export const FEATURE_MENUS = [
   { label: "Customer", icon: images.customer, route: '/Customer' },
 ];
 
+export const orderPages = [
+  '/Add',
+  '/OrderConfirmation',
+  '/PaymentMethods',
+  '/CompletePayment',
+  '/Receipt',
+];
+
 export const cards = [
   {
     title: "Card 1",

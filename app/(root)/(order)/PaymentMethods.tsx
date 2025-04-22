@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import Header from '@/components/shared/Header'
-import { useOrderContext } from '@/context/OrderContext'
+import { useOrder } from '@/context/OrderContext'
 import { formatCurrency } from '@/utils/format'
 
 const options = ["Cash", "Bank Transfer", "Debit Card", "Others"]
@@ -14,7 +14,7 @@ const PaymentMethods = () => {
   const handleBack = () => router.push('/OrderConfirmation')
   const handleConfirmPayment = () => router.push('/CompletePayment')
 
-  const { paymentMethod, setPaymentMethod, totalPrice} = useOrderContext()
+  const { paymentMethod, setPaymentMethod, finalTotal} = useOrder()
   // const [selected, setSelected] = useState(paymentMethod)
 
   return (
@@ -30,7 +30,7 @@ const PaymentMethods = () => {
           <View className="flex flex-row items-center justify-between mt-2 mb-2">
             <Text className='text-xl font-rubik-semibold'>Total Payment</Text>
             <TouchableOpacity onPress={() => handleBack()}>
-              <Text className="text-xl font-rubik-bold">{formatCurrency(totalPrice)}</Text>
+              <Text className="text-xl font-rubik-bold">{formatCurrency(finalTotal)}</Text>
             </TouchableOpacity>
           </View>
         </View>

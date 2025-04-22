@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OrderCard from '@/components/screens/OrderCard';
 import { router } from 'expo-router';
 import Header from '@/components/shared/Header';
-import { useOrderContext } from '@/context/OrderContext';
+import { useOrder } from '@/context/OrderContext';
 import { formatCurrency } from '@/utils/format';
 
 const OrderConfirmation = () => {
@@ -13,7 +13,7 @@ const OrderConfirmation = () => {
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
 
-    const { items, setItems, totalPrice } = useOrderContext();
+    const { items, setItems, totalPrice, discount, setDiscount, finalTotal } = useOrder();
     
     const handleQuantityChange = (product: any, quantity: number) => {
       if (quantity === 0) {
@@ -114,6 +114,11 @@ const OrderConfirmation = () => {
                 placeholder='Rp 0.00'
                 className='text-sm'
                 keyboardType='numeric'
+                value={formatCurrency(discount)}
+                onChangeText={(text) => {
+                  const numeric = parseInt(text.replace(/[^0-9]/g, '')) || 0;
+                  setDiscount(numeric);
+                }}
               />
             </View>
             <View className="flex-1 border border-gray-300 rounded-lg px-2">
@@ -132,7 +137,7 @@ const OrderConfirmation = () => {
           <View className='flex flex-col items-center'>
             <View className='flex flex-row items-start justify-between w-full px-5 pt-2'>
               <Text className='text-base font-rubik-medium'>Total</Text>
-              <Text className='text-base text-start font-rubik-bold'>{formatCurrency(totalPrice + 5000)}</Text>
+              <Text className='text-base text-start font-rubik-bold'>{formatCurrency(finalTotal)}</Text>
             </View>
             <View className='px-5 py-2 w-full'>
               <TouchableOpacity

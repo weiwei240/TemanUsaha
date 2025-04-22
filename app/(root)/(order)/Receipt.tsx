@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import images from '@/constants/images'
 import { formatCurrency } from '@/utils/format'
-import { useOrderContext } from '@/context/OrderContext'
+import { useOrder } from '@/context/OrderContext'
 
 // const items = [
 //   { name: 'Non-Stick Pan', qty: 1, price: 'Rp 90.000' },
@@ -18,7 +18,7 @@ const Receipt = () => {
   const insets = useSafeAreaInsets()
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
-  const {items, setItems, totalPrice, transactionTime} = useOrderContext()
+  const {items, setItems, totalPrice, transactionTime} = useOrder()
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -35,7 +35,6 @@ const Receipt = () => {
   }, [])
 
   const handleBack = () => {
-    setItems([])
     router.push('/')
   }
 
