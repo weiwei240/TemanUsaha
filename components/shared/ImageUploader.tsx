@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Alert, ImageSourcePropType } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 const MAX_IMAGE_SIZE = 10000 * 1024; // 10MB
 
-const ImageUploader = () => {
+const ImageUploader = ({ onImageSelected }: {onImageSelected: (uri: string) => void}) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
 
   const pickImage = async () => {
@@ -27,8 +27,9 @@ const ImageUploader = () => {
         Alert.alert('Image Too Large', 'Please upload an image under 100KB.');
         return;
       }
-
-      setImageUri(result.assets[0].uri);
+      const uri = result.assets[0].uri
+      setImageUri(uri);
+      onImageSelected(uri);
     }
   };
 

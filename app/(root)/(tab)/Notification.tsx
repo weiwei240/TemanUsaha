@@ -20,13 +20,12 @@ const getTypeColor = (type: string) => {
 
 const Notification = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/')
 
   const [type, setType] = useState('Transaction')
 
   return (
     <View className='flex-1 bg-white'>
-      <Header title='Notifications' onBack={handleBack}/>
+      <Header title='Notifications'/>
 
       <ScrollView
             contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

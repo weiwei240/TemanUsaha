@@ -25,6 +25,7 @@ const Add = () => {
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false)
   const { items, setItems, totalPrice, totalItems, setOrderInProgress } = useOrder();
+  const availableProducts = products.filter((item) => item.active);
   
   const handleQuantityChange = (product: Product, quantity: number) => {
     if (quantity === 0) {
@@ -52,9 +53,6 @@ const Add = () => {
   // );
 
   const handleCartPress = () => router.push('/OrderConfirmation')
-  const handleBack = () => {
-    router.push('/')
-  }
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -73,7 +71,7 @@ const Add = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title="Place Order" onBack={handleBack}/>
+      <Header title="Place Order"/>
       
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
@@ -84,15 +82,14 @@ const Add = () => {
 
         {/* Product List */}
         <View className="px-5 py-2 gap-1">
-          {products.map((section) => 
-                section.items.map((item, i) => {
-                  const existing = items.find((orderItem) => orderItem.name === item.name);
-                  const qty = existing?.qty ?? 0;
-                  return (
-                    <OrderCard key={i} item={{...item, qty}} index={i} onQuantityChange={(qty) => handleQuantityChange(item, qty)}/>
-                  )
-                })
-          )}
+          {
+            availableProducts.map((item, i) => {
+            const existing = items.find((orderItem) => orderItem.name === item.name);
+            const qty = existing?.qty ?? 0;
+            return(
+              <OrderCard key={i} item={{...item, qty}} index={i} onQuantityChange={(qty) => handleQuantityChange(item, qty)}/>
+            )
+          })}
         </View>
       </ScrollView>
 

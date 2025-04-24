@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -7,14 +7,53 @@ import { Ionicons } from '@expo/vector-icons'
 import FormField from '@/components/shared/FormField'
 import ImageUploader from '@/components/shared/ImageUploader'
 import VariantCard from '@/components/screens/VariantCard'
+import { Product } from '@/types/types'
+import { products } from '@/data/dummy'
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
+import images from '@/constants/images'
 
 const CreateProduct = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/Inventory')
+  const handleCategory = () => router.push('/Category')
+
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [unit, setUnit] = useState('Pcs');
+  const [stock, setStock] = useState('');
+  const [description, setDescription] = useState('');
+  const [sku, setSku] = useState('');
+  const [active, setActive] = useState(true);
+  const [category, setCategory] = useState('Uncategorized');
+  const [imageUri, setImageUri] = useState<string | undefined>();
+
+  const [stockForm, setStockForm] = useState(true);
+  const [skuForm, setSkuForm] = useState(true);
+  const [variantForm, setVariantForm] = useState(true);
+
+  const handleCreate = () => {
+    const newProduct: Product = {
+      id: uuidv4(),
+      name,
+      price: parseInt(price),
+      unit: 'Pcs',
+      stock: parseInt(stock),
+      sold: 0,
+      active,
+      category: 'Uncategorized',
+      description,
+      sku,
+      // image: imageUri ? { uri: imageUri } : undefined,
+      image: images.avatar,
+    }
+    products.push(newProduct)
+    Alert.alert('Product Saved', `${name} has been added to ${category}`);
+    router.push('/Inventory');
+  }
 
   return (
     <View className='flex-1 bg-white'>
-      <Header title='Create Product' onBack={handleBack} white />
+      <Header title='Create Product' white />
       <ScrollView
         className="px-5 py-2"
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
@@ -23,26 +62,19 @@ const CreateProduct = () => {
         <FormField label="Product Image">
           {() => (
             <View>
-              <ImageUploader />
+              <ImageUploader onImageSelected={(uri) => setImageUri(uri)}/>
               <Text className="text-xs text-gray-500 mt-1">Image size must less than 10MB</Text>
             </View>
           )}
         </FormField>
 
         {/* Product Status */}
-        <FormField label="Product Status" enableSwitch>
-          {(enabled) =>
-            enabled ?
-              <View className='flex-row gap-1'>
-                <Ionicons name='checkmark-circle' color='green' size={24}/>
-                <Text className='font-rubik'>Active</Text>
-              </View>
-            :
-            <View className='flex-row gap-1'>
-              <Ionicons name='close-circle' color='red' size={24}/>
-              <Text className='font-rubik'>Inactive</Text>
-            </View>
-          }
+        <FormField label="Product Status" enableSwitch switchValue={active} onSwitchChange={setActive}>
+          {(switchValue) => (
+              <Text className={`font-rubik ${switchValue ? 'text-green-700' : 'text-red-700'}`} >
+                {switchValue ? 'Active' : 'Inactive'}
+              </Text>
+          )}
         </FormField>
 
         {/* Product Name */}
@@ -50,6 +82,8 @@ const CreateProduct = () => {
           {() => (
             <TextInput
               placeholder="Enter product name..."
+              value={name}
+              onChangeText={setName}
               className="border rounded-md px-3 py-3 text-sm font-rubik"
             />
           )}
@@ -65,6 +99,8 @@ const CreateProduct = () => {
               <TextInput
                 placeholder="0.00"
                 keyboardType="numeric"
+                value={price}
+                onChangeText={setPrice}
                 className="flex-1 px-2 text-sm text-gray-800 font-rubik"
               />
               <TouchableOpacity className="flex-row items-center gap-1">
@@ -80,13 +116,15 @@ const CreateProduct = () => {
         </FormField>
 
         {/* Stock */}
-        <FormField label="Stock" required enableSwitch>
-          {(enabled) => (
+        <FormField label="Stock" required enableSwitch switchValue={stockForm} onSwitchChange={setStockForm}>
+          {(switchValue) => (
             <TextInput
-              editable={enabled}
+              editable={switchValue}
               placeholder="Enter stock.."
-              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!enabled ? 'bg-gray-200' : ''}`}
               keyboardType='numeric'
+              value={stock}
+              onChangeText={setStock}
+              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!switchValue ? 'bg-gray-200' : ''}`}
             />
           )}
         </FormField>
@@ -101,7 +139,7 @@ const CreateProduct = () => {
                 <Text className="text-sm text-gray-800 font-rubik">Uncategorized</Text>
                 <Ionicons name='chevron-down-outline' size={16} color="gray" />
               </TouchableOpacity>
-              <TouchableOpacity className="ml-2">
+              <TouchableOpacity className="ml-2" onPress={handleCategory}>
                 <Text className="text-sm text-indigo-500 font-rubik-semibold">Edit Category</Text>
               </TouchableOpacity>
             </View>
@@ -113,36 +151,40 @@ const CreateProduct = () => {
           {() => (
             <TextInput
               placeholder="Enter a description..."
-              className="border rounded-md px-3 py-3 text-sm font-rubik h-48"
               textAlignVertical='top'
+              value={description}
+              onChangeText={setDescription}
+              className="border rounded-md px-3 py-3 text-sm font-rubik h-48"
               multiline
             />
           )}
         </FormField>
 
         {/* SKU */}
-        <FormField label="SKU" enableSwitch>
-          {(enabled) => (
+        <FormField label="SKU" enableSwitch switchValue={skuForm} onSwitchChange={setSkuForm}>
+          {(switchValue) => (
             <TextInput
-              editable={enabled}
+              editable={switchValue}
+              value={sku}
+              onChangeText={setSku}
               placeholder="Enter SKU..."
-              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!enabled ? 'bg-gray-200' : ''}`}
+              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!switchValue ? 'bg-gray-200' : ''}`}
             />
           )}
         </FormField>
 
         {/* Variant */}
-        <FormField label="Variant" enableSwitch>
-          {(enabled) => (
+        <FormField label="Variant" enableSwitch switchValue={variantForm} onSwitchChange={setVariantForm}>
+          {(switchValue) => (
             <View className='items-center'>
-              {enabled ?
+              {switchValue ?
                 [1, 2, 3].map((variant, i) => (
                   <VariantCard key={i}/>
                 ))
               :
                 <View></View>   
               }
-              {enabled ?
+              {switchValue ?
                 <TouchableOpacity className='bg-green-500 rounded-md p-2 flex-row'>
                   <Text className='text-center font-rubik text-white mr-2'>Add Variant</Text>
                   <Ionicons name='add-circle' color='white' size={24}/>
@@ -159,7 +201,7 @@ const CreateProduct = () => {
           <View className='px-5 py-2 w-full'>
             <TouchableOpacity
               className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-              onPress={() => handleBack()}
+              onPress={handleCreate}
             >
               <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Save Product</Text>
             </TouchableOpacity>

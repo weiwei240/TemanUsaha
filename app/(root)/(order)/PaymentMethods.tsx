@@ -11,7 +11,6 @@ const options = ["Cash", "Bank Transfer", "Debit Card", "Others"]
 
 const PaymentMethods = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/OrderConfirmation')
   const handleConfirmPayment = () => router.push('/CompletePayment')
 
   const { paymentMethod, setPaymentMethod, finalTotal} = useOrder()
@@ -20,7 +19,7 @@ const PaymentMethods = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Payment Methods' onBack={handleBack}/>
+      <Header title='Payment Methods'/>
 
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
@@ -29,9 +28,7 @@ const PaymentMethods = () => {
         <View className='flex-col px-5 py-2'>
           <View className="flex flex-row items-center justify-between mt-2 mb-2">
             <Text className='text-xl font-rubik-semibold'>Total Payment</Text>
-            <TouchableOpacity onPress={() => handleBack()}>
-              <Text className="text-xl font-rubik-bold">{formatCurrency(finalTotal)}</Text>
-            </TouchableOpacity>
+            <Text className="text-xl font-rubik-bold">{formatCurrency(finalTotal)}</Text>
           </View>
         </View>
 

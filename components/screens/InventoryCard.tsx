@@ -1,24 +1,17 @@
-import { View, Text, Image, ImageSourcePropType, Switch, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Switch, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import icons from '@/constants/icons'
 import { formatCurrency } from '@/utils/format'
-
-interface Item{
-  name: string,
-  price: number,
-  unit: string,
-  sold: number,
-  stock: number,
-  image: ImageSourcePropType,
-  active: boolean,
-}
+import { Product } from '@/types/types'
+import { router } from 'expo-router'
 
 interface Props{
-  item: Item
+  item: Product
 }
 
 const InventoryCard = ({item}: Props) => {
   const [isActive, setIsActive] = useState(item.active)
+  const handleMore = () => router.push({ pathname: '/EditProduct', params: {id: item.id} })
 
   return (
     <View
@@ -51,7 +44,7 @@ const InventoryCard = ({item}: Props) => {
         thumbColor={isActive ? "#15803d" : "#727272"}
         trackColor={{ false: "#fff", true: "#d1fae5" }}
       />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleMore}>
         <Image source={icons.more} className="w-4 h-4 ml-2" />
       </TouchableOpacity>
     </View>

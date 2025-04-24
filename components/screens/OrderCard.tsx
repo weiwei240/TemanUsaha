@@ -66,9 +66,9 @@ const OrderCard = ({item, index, onQuantityChange}: Props) => {
           <Text className="text-base font-semibold" numberOfLines={1}>{item.name}</Text>
           <Text className="text-sm text-gray-600" numberOfLines={1}>
             {formatCurrency(item.price)} /{" "}
-            <Text className="text-xs text-gray-400">{item.unit}</Text>
+            <Text numberOfLines={1} className="text-xs text-gray-400">{item.unit}</Text>
           </Text>
-          <Text className={`text-xs ${quantity === item.stock ? 'text-red-500' : 'text-gray-500'}`}>
+          <Text numberOfLines={1} className={`text-xs ${quantity === item.stock ? 'text-red-500' : 'text-gray-500'}`}>
             📦 Stock: {item.stock}
           </Text>
         </View>

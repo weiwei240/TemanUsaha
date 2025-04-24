@@ -9,13 +9,12 @@ import OptionItem from '@/components/screens/OptionItem'
 
 const Settings = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/')
   const handleSignOut = () => router.push('/')
 
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Settings' onBack={handleBack} white/>
+      <Header title='Settings' white/>
       
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}

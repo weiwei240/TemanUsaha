@@ -9,7 +9,6 @@ import { formatCurrency } from '@/utils/format';
 
 const OrderConfirmation = () => {
   const insets = useSafeAreaInsets();
-  const handleBack = () => router.push('/Add')
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
 
@@ -53,7 +52,7 @@ const OrderConfirmation = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Order Confirmation' onBack={handleBack}/>
+      <Header title='Order Confirmation'/>
       
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
@@ -62,7 +61,7 @@ const OrderConfirmation = () => {
         <View className='flex-col px-5 py-2 gap-1'>
           <View className="flex flex-row items-center justify-between mt-2 mb-2">
             <Text className='text-xl font-rubik-semibold'>Order Summary</Text>
-            <TouchableOpacity onPress={() => handleBack()}>
+            <TouchableOpacity onPress={() => router.push('/Add')}>
               <Text className="text-base font-rubik text-green-400">Add Items</Text>
             </TouchableOpacity>
           </View>

@@ -18,7 +18,7 @@ const Receipt = () => {
   const insets = useSafeAreaInsets()
 
   const [keyboardVisible, setKeyboardVisible] = useState(false)
-  const {items, setItems, totalPrice, transactionTime} = useOrder()
+  const {items, setItems, finalTotal, transactionTime, discount} = useOrder()
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -34,14 +34,14 @@ const Receipt = () => {
     }
   }, [])
 
-  const handleBack = () => {
+  const handleComplete = () => {
     router.push('/')
   }
 
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <Header title='Receipt' onBack={handleBack}/>
+      <Header title='Receipt' onBack={handleComplete}/>
 
       <ScrollView
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
@@ -74,15 +74,15 @@ const Receipt = () => {
             {/* Payment Summary */}
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-base font-rubik-bold">Total Payment</Text>
-              <Text className="text-base font-rubik-bold">{formatCurrency(totalPrice)}</Text>
+              <Text className="text-base font-rubik-bold">{formatCurrency(finalTotal)}</Text>
             </View>
 
             {/* Item List */}
             {items.map((item, index) => (
               <View key={index} className="flex-row justify-between mb-1">
-                <Text className="flex-1 text-sm">{item.name}</Text>
-                <Text className="w-8 text-sm text-center">x {item.qty}</Text>
-                <Text className="w-20 text-right text-sm">{formatCurrency(item.price)}</Text>
+                <Text numberOfLines={1} className="w-1/2 text-sm">{item.name}</Text>
+                <Text numberOfLines={1} className="w-8 text-xs text-center">x {item.qty}</Text>
+                <Text numberOfLines={1} className="w-20 text-right text-xs">{formatCurrency(item.price)}</Text>
               </View>
             ))}
 
@@ -95,7 +95,7 @@ const Receipt = () => {
             </View>
             <View className="flex-row justify-between">
               <Text className="text-sm">Discount</Text>
-              <Text className="text-sm">0</Text>
+              <Text className="text-sm">{formatCurrency(discount)}</Text>
             </View>
 
             <View className="border-b border-green-500 my-4" />
@@ -121,13 +121,13 @@ const Receipt = () => {
             <View className='px-5 py-2 w-full gap-4'>
               <TouchableOpacity
                 className='items-center justify-center bg-white border border-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-                onPress={() => handleBack()}
+                onPress={handleComplete}
               >
                 <Text className='text-green-600 text-lg text-center font-rubik-bold mt-1'>Print Receipt</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-                onPress={() => handleBack()}
+                onPress={handleComplete}
               >
                 <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Send Bill</Text>
               </TouchableOpacity>

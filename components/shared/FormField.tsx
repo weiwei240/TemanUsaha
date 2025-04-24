@@ -7,6 +7,8 @@ interface Props{
   required?: boolean;
   info?: boolean;
   enableSwitch?: boolean;
+  switchValue?: boolean;
+  onSwitchChange?: (value: boolean) => void;
   children: (enabled: boolean) => React.ReactNode;
 }
 
@@ -15,9 +17,10 @@ const FormField = ({
   required,
   info = true,
   enableSwitch,
+  switchValue = true,
+  onSwitchChange,
   children,
 }: Props) => {
-  const [enabled, setEnabled] = useState(enableSwitch ?? true);
 
   return (
     <View className="mb-4">
@@ -29,9 +32,9 @@ const FormField = ({
         <View className='flex-row items-center'>
           {enableSwitch && (
             <Switch
-              value={enabled}
-              onValueChange={setEnabled}
-              thumbColor={enabled ? "#15803d" : "#727272"}
+              value={switchValue}
+              onValueChange={onSwitchChange}
+              thumbColor={switchValue ? "#15803d" : "#727272"}
               trackColor={{ false: "#fff", true: "#d1fae5" }}
             />
           )}
@@ -42,7 +45,7 @@ const FormField = ({
           }
         </View>
       </View>
-      {children(enabled)}
+      {children(switchValue)}
     </View>
   );
 };

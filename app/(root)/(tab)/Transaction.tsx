@@ -4,11 +4,10 @@ import Header from '@/components/shared/Header'
 import { router } from 'expo-router'
 
 const Transaction = () => {
-  const handleBack = () => router.push('/')
 
   return (
     <View className='flex-1 bg-white'>
-      <Header title='Transactions' onBack={handleBack}/>
+      <Header title='Transactions'/>
 
     </View>
   )

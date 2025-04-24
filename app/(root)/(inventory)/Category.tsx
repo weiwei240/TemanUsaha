@@ -34,12 +34,11 @@ const categoryColumns: Column<ItemCategory>[] = [
 
 const Category = () => {
   const insets = useSafeAreaInsets()
-  const handleBack = () => router.push('/Inventory')
   const handleCreateCategory = () => router.push('/')
 
   return (
     <View className='flex-1 bg-white'>
-      <Header title='Category' onBack={handleBack} onAdd={handleCreateCategory} white />
+      <Header title='Category' onAdd={handleCreateCategory} white />
       <ScrollView
             contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
       >
@@ -51,10 +50,7 @@ const Category = () => {
       <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>
         <View className='flex flex-col items-center'>
           <View className='px-5 py-2 w-full'>
-            <TouchableOpacity
-              className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
-              onPress={() => handleBack()}
-            >
+            <TouchableOpacity className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'>
               <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Change Position</Text>
             </TouchableOpacity>
           </View>

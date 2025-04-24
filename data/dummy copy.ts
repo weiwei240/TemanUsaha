@@ -1,8 +1,6 @@
 import images from "@/constants/images";
 import { Product } from "@/types/types";
 
-// PRODUCTS
-
 export const categories = [
   {
     id: "9136594f-7a9f-4b9b-bf3f-a6c6539ff78f",
@@ -82,6 +80,55 @@ export const products: Product[] = [
   },
 ];
 
+// export const products = [
+//   {
+//     category: "Kitchen Appliances",
+//     items: [
+//       {
+//         name: "Non-Stick Pan",
+//         price: 90000,
+//         unit: "Pcs",
+//         sold: 90,
+//         stock: 20,
+//         image: images.pan,
+//         active: true,
+//       },
+//       {
+//         name: "Steel Knife Set",
+//         price: 60000,
+//         unit: "Pcs",
+//         sold: 60,
+//         stock: 60,
+//         image: images.kitchen,
+//         active: true,
+//       },
+//     ],
+//   },
+//   {
+//     category: "Daily Necessities",
+//     items: [
+//       {
+//         name: "Cooking Oil",
+//         price: 9000,
+//         unit: "Liter",
+//         sold: 345,
+//         stock: 30,
+//         image: images.fruit,
+//         active: true,
+//       },
+//       {
+//         name: "Egg",
+//         price: 22000,
+//         unit: "Kg",
+//         sold: 60,
+//         stock: 30,
+//         image: images.egg,
+//         active: true,
+//       },
+//     ],
+//   },
+// ];
+
 export const featured = [
   {
     name: 'Non-Stick Pan',
@@ -112,31 +159,6 @@ export const featured = [
     sold: 50,
   },
 ]
-
-// TRANSACTION DATA
-
-export const paymentData = [
-  { key: 1, label: "QRIS", amount: 1300000, color: "#5E5CE6" },
-  { key: 2, label: "Bank Transfer", amount: 840000, color: "#49B6FF" },
-  { key: 3, label: "Cash", amount: 1920000, color: "#FF8A00" },
-  { key: 4, label: "Debit Card", amount: 600000, color: "#00C48C" },
-];
-
-export const expenseData = [
-  { key: 1, label: "Goods & Materials", amount: 1300000, color: "#5E5CE6" },
-  { key: 2, label: "Operational", amount: 840000, color: "#49B6FF" },
-  { key: 3, label: "Marketing & Promotion", amount: 1920000, color: "#FF8A00" },
-  { key: 4, label: "Transportation & Logistics", amount: 600000, color: "#00C48C" },
-  { key: 5, label: "Other", amount: 600000, color: "#FF0000" },
-];
-
-export const investmentData = [
-  { key: 1, label: "Working Capital", amount: 1200000, color: "#5E5CE6" },
-  { key: 2, label: "Equipment & Machinery", amount: 590000, color: "#49B6FF" },
-  { key: 3, label: "Human Resources", amount: 1500000, color: "#FF8A00" },
-  { key: 4, label: "Marketing & Branding", amount: 600000, color: "#00C48C" },
-  { key: 5, label: "Other", amount: 300000, color: "#FF0000" },
-];
 
 export const transactions = [
   {
@@ -241,62 +263,6 @@ export const transactions = [
   },
 ];
 
-
-export const dummyTransactions = [
-  {
-    type: 'Order',
-    id: '24SEAA',
-    message: 'Order #24SEAA has been paid for Rp 85.100',
-    date: '21/09/2024',
-    time: '18:42',
-  },
-  {
-    type: 'Bill',
-    id: '83GASW',
-    message: 'Bill #83GASW has been paid for Rp 190.000',
-    date: '20/09/2024',
-    time: '13:21',
-  },
-  {
-    type: 'Bill',
-    id: '71KJAL',
-    message: 'Bill #71KJAL has been paid for Rp 38.400',
-    date: '18/09/2024',
-    time: '10:06',
-  },
-  {
-    type: 'Offer',
-    id: '91PWKD',
-    message: 'Offer #91PWKD has been placed',
-    date: '18/09/2024',
-    time: '09:30',
-  },
-];
-
-export const dummySystem = [
-  {
-    title: "Verification Successful!",
-    message:
-      "Verification successful! Your account is fully active and can be used",
-    date: "01/09/2024",
-    time: "13:21",
-  },
-  {
-    title: "Profile update successful!",
-    message: "Profile has been updated, check your profile immediately",
-    date: "01/09/2024",
-    time: "13:21",
-  },
-  {
-    title: "Bank account has been added",
-    message: "Bank accounts can now be used as a transfer destination",
-    date: "02/08/2024",
-    time: "10:56",
-  },
-];
-
-// PEOPLE DATA
-
 export const employees = [
   {
     id: '1',
@@ -396,5 +362,58 @@ export const customers = [
     phone: '081234567897',
     totalSpending: 12_000_000,
     transactions: 5,
+  },
+];
+
+export const dummyTransactions = [
+  {
+    type: 'Order',
+    id: '24SEAA',
+    message: 'Order #24SEAA has been paid for Rp 85.100',
+    date: '21/09/2024',
+    time: '18:42',
+  },
+  {
+    type: 'Bill',
+    id: '83GASW',
+    message: 'Bill #83GASW has been paid for Rp 190.000',
+    date: '20/09/2024',
+    time: '13:21',
+  },
+  {
+    type: 'Bill',
+    id: '71KJAL',
+    message: 'Bill #71KJAL has been paid for Rp 38.400',
+    date: '18/09/2024',
+    time: '10:06',
+  },
+  {
+    type: 'Offer',
+    id: '91PWKD',
+    message: 'Offer #91PWKD has been placed',
+    date: '18/09/2024',
+    time: '09:30',
+  },
+];
+
+export const dummySystem = [
+  {
+    title: "Verification Successful!",
+    message:
+      "Verification successful! Your account is fully active and can be used",
+    date: "01/09/2024",
+    time: "13:21",
+  },
+  {
+    title: "Profile update successful!",
+    message: "Profile has been updated, check your profile immediately",
+    date: "01/09/2024",
+    time: "13:21",
+  },
+  {
+    title: "Bank account has been added",
+    message: "Bank accounts can now be used as a transfer destination",
+    date: "02/08/2024",
+    time: "10:56",
   },
 ];

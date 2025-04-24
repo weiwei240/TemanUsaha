@@ -3,9 +3,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import UserBalanceCard from "@/components/screens/BalanceCard";
 import { FeatureMenu } from "@/components/screens/FeatureMenu";
-import FinancialReportCard from "@/components/screens/FinancialReport";
+import FinancialReportCard from "@/components/shared/FinancialReportCard";
 import icons from "@/constants/icons";
 import { router } from "expo-router";
+import { paymentData } from "@/data/dummy"
 
 export default function Home() {
   const insets = useSafeAreaInsets();
@@ -62,7 +63,21 @@ export default function Home() {
       <FeatureMenu />
 
       {/* Financial Report */}
-      <FinancialReportCard />
+      <View className="bg-white mx-4 rounded-2xl p-4 shadow-2xl">
+        {/* Header */}
+        <View className="flex-row justify-between items-center mb-2">
+          <View>
+            <Text className="text-lg font-semibold">Financial Report</Text>
+            <Text className="text-xs text-gray-500 mt-[-2px]">
+              Better financial reports unlock new opportunities.
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/FinancialReport')}>
+            <Text className="text-sm text-blue-500 font-medium">View</Text>
+          </TouchableOpacity>
+        </View>
+        <FinancialReportCard title="Payment Methods" data={paymentData}/>
+      </View>
 
       {/* Articles */}
       <View className="px-5 mt-5">

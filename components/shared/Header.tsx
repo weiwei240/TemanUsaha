@@ -1,15 +1,16 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 interface Props {
   title: string;
-  onBack: () => void;
+  onBack?: () => void;
   onAdd?: () => void;
   white?: boolean;
 }
 
-const Header = ({ title, onBack, onAdd, white = false }: Props) => {
+const Header = ({ title, onBack = () => router.back(), onAdd, white = false }: Props) => {
   return (
     <View style={[styles.header, white && styles.headerWhite]}>
       <View className='flex-row justify-center items-center gap-2'>
