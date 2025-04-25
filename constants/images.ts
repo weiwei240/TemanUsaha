@@ -18,6 +18,7 @@ import fruit from "@/assets/images/Fruit.jpeg";
 import kitchen from "@/assets/images/Kitchen.jpeg";
 import daily from "@/assets/images/Daily.jpeg";
 import qrcode from "@/assets/images/qrcode.png"
+import icon from "@/assets/images/icon.png"
 
 export default {
   onboarding,
@@ -40,4 +41,5 @@ export default {
   kitchen,
   daily,
   qrcode,
+  icon,
 };

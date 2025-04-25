@@ -64,6 +64,9 @@ export default function Home() {
 
       {/* Financial Report */}
       <View className="bg-white mx-4 rounded-2xl p-4 shadow-2xl">
+        <TouchableOpacity onPress={() => router.push('/SignIn')}>
+          <Text>Login Screen</Text>
+        </TouchableOpacity>
         {/* Header */}
         <View className="flex-row justify-between items-center mb-2">
           <View>
