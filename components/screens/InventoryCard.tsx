@@ -18,7 +18,7 @@ const InventoryCard = ({item}: Props) => {
       className={`rounded-xl shadow-sm border flex-row items-center p-3 mb-3 ${isActive ? 'bg-white border-gray-200' : 'bg-gray-200 border-gray-300'}`}
     >
       <Image
-        source={item.image}
+        source={{uri: item.image}}
         className="size-16 rounded-lg mr-3"
         resizeMode="cover"
       />

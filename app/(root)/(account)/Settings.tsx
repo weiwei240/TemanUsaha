@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -6,10 +6,22 @@ import { router } from 'expo-router'
 import images from '@/constants/images'
 import { Ionicons } from '@expo/vector-icons'
 import OptionItem from '@/components/screens/OptionItem'
+import { logout } from '@/lib/appwrite'
+import { useGlobalContext } from '@/context/GlobalContext'
 
 const Settings = () => {
   const insets = useSafeAreaInsets()
-  const handleSignOut = () => router.push('/')
+  const { user, refetch } = useGlobalContext()
+
+    const handleLogout = async () => {
+    const result = await logout();
+    if (result) {
+      Alert.alert("Success", "Logged out successfully");
+      refetch();
+    } else {
+      Alert.alert("Error", "Failed to logout");
+    }
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -77,7 +89,7 @@ const Settings = () => {
           </View>
 
           {/* Sign Out */}
-          <TouchableOpacity className='bg-red-200 shadow-md rounded-xl flex-row justify-center items-center p-2 m-4' onPress={handleSignOut}>
+          <TouchableOpacity className='bg-red-200 shadow-md rounded-xl flex-row justify-center items-center p-2 m-4' onPress={handleLogout}>
             <Ionicons name='log-out' color='#ef4444' size={24}/>
             <Text className='font-rubik-bold text-red-500'>Sign Out</Text>
           </TouchableOpacity>

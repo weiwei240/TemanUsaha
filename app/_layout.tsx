@@ -8,6 +8,7 @@ import { OrderProvider, useOrder } from "@/context/OrderContext";
 import { orderPages } from "@/constants/data";
 import { useAutoResetOnExit } from "@/hooks/useAutoResetOnExit";
 import { useOrderFlow } from "@/hooks/useOrderFlow";
+import GlobalProvider from "@/context/GlobalContext";
 
 function InnerLayout() {
   const { orderInProgress, resetOrder } = useOrder();
@@ -51,8 +52,10 @@ export default function RootLayout() {
   }
 
   return (
-    <OrderProvider>
-      <InnerLayout />
-    </OrderProvider>
+    <GlobalProvider>
+      <OrderProvider>
+        <InnerLayout />
+      </OrderProvider>
+    </GlobalProvider>
   );
 }

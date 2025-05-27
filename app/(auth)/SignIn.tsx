@@ -1,22 +1,34 @@
-import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FilterSwitch } from '@/components/shared/Filter'
 import images from '@/constants/images'
 import FormField from '@/components/shared/FormField'
-import { router } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
+import { Redirect, router } from 'expo-router'
 import icons from '@/constants/icons'
+import { login } from '@/lib/appwrite'
+import { useGlobalContext } from '@/context/GlobalContext'
 
 const segments = ["Sign Up", "Log In"]
 
 const SignIn = () => {
   const insets = useSafeAreaInsets()
-  const handleSignUp = () => router.push('/')
-
+  const { refetch, loading, isLoggedIn } = useGlobalContext()
+  
+  const handleLogin = async () => {
+    const result = await login()
+    if(result){
+      refetch()
+    }else{
+      Alert.alert('Error', 'failed to login')
+    }
+  }
+  
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  
+  if (!loading && isLoggedIn) return <Redirect href="/" />
 
   return (
     <ScrollView
@@ -63,7 +75,6 @@ const SignIn = () => {
         </FormField>
         <TouchableOpacity
           className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2 my-4'
-          onPress={() => handleSignUp()}
         >
           <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Sign Up</Text>
         </TouchableOpacity>
@@ -73,7 +84,7 @@ const SignIn = () => {
             <TouchableOpacity className='border rounded-full p-2 border-gray-400'>
               <Image source={icons.more} className='size-7'/>
             </TouchableOpacity>
-            <TouchableOpacity className='border rounded-full p-2 border-gray-400'>
+            <TouchableOpacity className='border rounded-full p-2 border-gray-400' onPress={handleLogin}>
               <Image source={icons.google} className='size-7'/>
             </TouchableOpacity>
             <TouchableOpacity className='border rounded-full p-2 border-gray-400'>

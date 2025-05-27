@@ -6,22 +6,17 @@ import { FeatureMenu } from "@/components/screens/FeatureMenu";
 import FinancialReportCard from "@/components/shared/FinancialReportCard";
 import icons from "@/constants/icons";
 import { router } from "expo-router";
-import { paymentData } from "@/data/dummy"
+import { paymentData, dummyArticles } from "@/data/dummy"
+import { getUserEmployees } from "@/lib/appwrite";
+import { useAppwrite } from "@/hooks/useAppwrite";
 
 export default function Home() {
   const insets = useSafeAreaInsets();
   const handleSettings = () => router.push('/Settings')
 
-  const dummyArticles = [
-    {
-      title: "5 Key Strategies to Drive Business Growth",
-      img: "https://via.placeholder.com/150",
-    },
-    {
-      title: "Adapting to Change: How Businesses Thrive in Uncertainty",
-      img: "https://via.placeholder.com/150",
-    },
-  ];
+  const {data: userEmployees, loading: userEmployeesLoading} = useAppwrite({
+    fn: getUserEmployees,
+  })
 
   return (
     <ScrollView

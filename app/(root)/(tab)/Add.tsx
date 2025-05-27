@@ -10,14 +10,17 @@ import Search from "@/components/shared/Search";
 import { FilterHorizontal } from "@/components/shared/Filter";
 import OrderCard from "@/components/screens/OrderCard";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import Header from "@/components/shared/Header";
-import { useCallback, useEffect, useState } from "react";
-import { products } from "@/data/dummy";
+import { useEffect, useState } from "react";
+// import { products } from "@/data/dummy";
 import { useOrder } from "@/context/OrderContext";
 import { formatCurrency } from "@/utils/format";
 import { Product, OrderItem } from "@/types/types";
 import React from "react";
+import { useAppwrite } from "@/hooks/useAppwrite";
+import { getBusinessProducts } from "@/lib/appwrite";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const segments = ["All", "Category 1", "Category 2", "Category 3", "Category 4", "Category 5"];
 
@@ -25,8 +28,16 @@ const Add = () => {
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false)
   const { items, setItems, totalPrice, totalItems, setOrderInProgress } = useOrder();
-  const availableProducts = products.filter((item) => item.active);
+  const { businessId } = useGlobalContext()
   
+  const { data: products, loading: productsLoading } = useAppwrite<Product[], { businessId: string }>({
+    fn: getBusinessProducts,
+    params: { businessId: businessId! },
+    skip: !businessId, // optional: skip if businessId isn't ready
+  })
+
+  const availableProducts = products?.filter((item) => item.active);
+
   const handleQuantityChange = (product: Product, quantity: number) => {
     if (quantity === 0) {
       setItems((prev: OrderItem[]) =>
@@ -45,12 +56,6 @@ const Add = () => {
       });
     }
   };
-  
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setOrderInProgress(true);
-  //   }, [])
-  // );
 
   const handleCartPress = () => router.push('/OrderConfirmation')
 
@@ -82,14 +87,24 @@ const Add = () => {
 
         {/* Product List */}
         <View className="px-5 py-2 gap-1">
-          {
-            availableProducts.map((item, i) => {
-            const existing = items.find((orderItem) => orderItem.name === item.name);
-            const qty = existing?.qty ?? 0;
-            return(
-              <OrderCard key={i} item={{...item, qty}} index={i} onQuantityChange={(qty) => handleQuantityChange(item, qty)}/>
-            )
-          })}
+          {productsLoading ? (
+            <Text className="text-center text-gray-500 mt-4">Loading products...</Text>
+          ) : availableProducts!.length === 0 ? (
+            <Text className="text-center text-gray-500 mt-4">No active products available.</Text>
+          ) : (
+            availableProducts!.map((item, i) => {
+              const existing = items.find((orderItem) => orderItem.name === item.name);
+              const qty = existing?.qty ?? 0;
+              return (
+                <OrderCard
+                  key={i}
+                  item={{ ...item, qty }}
+                  index={i}
+                  onQuantityChange={(qty) => handleQuantityChange(item, qty)}
+                />
+              );
+            })
+          )}
         </View>
       </ScrollView>
 

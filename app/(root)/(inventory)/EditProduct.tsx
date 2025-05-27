@@ -14,19 +14,30 @@ import FormField from "@/components/shared/FormField";
 import { Product } from "@/types/types";
 import { products } from "@/data/dummy";
 import ImageUploader from "@/components/shared/ImageUploader";
+import { config, databases, getProductById } from "@/lib/appwrite";
+import { MultiSelectDropdown }
 
 const EditProduct = () => {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const productToEdit = products.find((p) => p.id === id);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+
+  useEffect(() => {
+  const loadProduct = async () => {
+    if (!id) return;
+    const product = await getProductById(id);
+    setProductToEdit(product);
+  };
+  loadProduct();
+}, [id]);
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [unit, setUnit] = useState('');
   const [stock, setStock] = useState('');
   const [sku, setSku] = useState('');
-  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState(['']);
   const [description, setDescription] = useState('');
   const [active, setActive] = useState(true);
   const [imageUri, setImageUri] = useState<string | undefined>();
@@ -38,7 +49,7 @@ const EditProduct = () => {
       setUnit(productToEdit.unit);
       setStock(productToEdit.stock.toString());
       setSku(productToEdit.sku || '');
-      setCategory(productToEdit.category);
+      setCategories(productToEdit.categories);
       setDescription(productToEdit.description || '');
       setActive(productToEdit.active);
       // if (typeof productToEdit.image === 'object' && productToEdit.image?.uri) {
@@ -47,7 +58,7 @@ const EditProduct = () => {
     }
   }, [productToEdit]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!productToEdit) return;
 
     const updatedProduct: Product = {
@@ -57,16 +68,28 @@ const EditProduct = () => {
       unit,
       stock: parseInt(stock),
       sku,
-      category,
+      categories,
       description,
       active,
       // image: imageUri ? { uri: imageUri } : undefined,
     };
 
-    const index = products.findIndex((p) => p.id === productToEdit.id);
-    if (index !== -1) {
-      products[index] = updatedProduct;
-    }
+    await databases.updateDocument(
+      config.databaseId!,
+      config.productsCollectionId!,
+      productToEdit.id,
+      {
+        name,
+        price: parseInt(price),
+        unit,
+        stock: parseInt(stock),
+        sku,
+        categories,
+        description,
+        active,
+        image: imageUri ?? productToEdit.image, // assuming image is URL or file ID
+      }
+    );
 
     Alert.alert("Product Updated", `${name} has been saved.`);
     router.push('/Inventory');
@@ -113,9 +136,13 @@ const EditProduct = () => {
           )}
         </FormField>
 
-        <FormField label="Category">{() => (
-          <TextInput value={category} onChangeText={setCategory} className="border rounded-md px-3 py-3 text-sm font-rubik" />
-        )}</FormField>
+        <FormField label="Categories">
+          <MultiSelectDropdown
+            options={allCategories} // fetched from Appwrite
+            selected={selectedCategories}
+            onChange={setSelectedCategories}
+          />
+        </FormField>
 
         <FormField label="Description">{() => (
           <TextInput value={description} onChangeText={setDescription} multiline className="border rounded-md px-3 py-3 text-sm font-rubik h-24 text-start" />

@@ -58,14 +58,14 @@ const OrderCard = ({item, index, onQuantityChange}: Props) => {
       >
         {/* Product */}
         <Image
-          source={item.image}
+          source={{uri: item.image}}
           className="size-16 rounded-lg mr-3"
           resizeMode="cover"
         />
         <View className="flex-1">
           <Text className="text-base font-semibold" numberOfLines={1}>{item.name}</Text>
           <Text className="text-sm text-gray-600" numberOfLines={1}>
-            {formatCurrency(item.price)} /{" "}
+            {formatCurrency(item.price)} {item.unit ? "/ " : ""}
             <Text numberOfLines={1} className="text-xs text-gray-400">{item.unit}</Text>
           </Text>
           <Text numberOfLines={1} className={`text-xs ${quantity === item.stock ? 'text-red-500' : 'text-gray-500'}`}>

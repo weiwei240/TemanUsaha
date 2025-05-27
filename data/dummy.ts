@@ -1,6 +1,19 @@
 import images from "@/constants/images";
 import { Product } from "@/types/types";
 
+// ARTICLES
+
+export const dummyArticles = [
+  {
+    title: "5 Key Strategies to Drive Business Growth",
+    img: "https://via.placeholder.com/150",
+  },
+  {
+    title: "Adapting to Change: How Businesses Thrive in Uncertainty",
+    img: "https://via.placeholder.com/150",
+  },
+];
+
 // PRODUCTS
 
 export const categories = [
@@ -39,7 +52,7 @@ export const products: Product[] = [
     sku: "KA001",
     image: images.pan,
     active: true,
-    category: "Kitchen Appliances"
+    categories: ["Kitchen Appliances"]
   },
   {
     id: "9abd4e28-8b58-40e9-ba05-e677b4acd4c2",
@@ -52,7 +65,7 @@ export const products: Product[] = [
     sku: "KA002",
     image: images.kitchen,
     active: true,
-    category: "Kitchen Appliances"
+    categories: ["Kitchen Appliances"]
   },
   {
     id: "4945dad9-1633-4e16-9cc3-580acdf1a5b6",
@@ -65,7 +78,7 @@ export const products: Product[] = [
     sku: "DN001",
     image: images.fruit,
     active: true,
-    category: "Daily Necessities"
+    categories: ["Daily Necessities"]
   },
   {
     id: "c2ca3e17-5b5b-439d-8ab1-582fc689bec9",
@@ -78,7 +91,7 @@ export const products: Product[] = [
     sku: "DN002",
     image: images.egg,
     active: true,
-    category: "Daily Necessities"
+    categories: ["Daily Necessities"]
   },
 ];
 

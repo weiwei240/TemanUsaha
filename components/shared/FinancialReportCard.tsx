@@ -4,6 +4,7 @@ import { PieChart } from "react-native-svg-charts";
 import icons from "@/constants/icons";
 import { ChartData } from "@/types/types";
 import { formatCurrency } from "@/utils/format";
+import PieChartWithTotal from "./PieChartWithTotal";
 
 interface Props{
   title: string;
@@ -42,21 +43,7 @@ const FinancialReportCard = ({title, data}: Props) => {
       <View className="flex-row items-start gap-4 mb-4">
         {/* Pie Chart */}
         <View className="w-[110px] h-[100px]">
-          <PieChart
-            style={{ height: 100 }}
-            data={pieData}
-            innerRadius={40}
-            padAngle={0}
-          />
-          {/* Overlay Center Text */}
-          <View className="absolute inset-0 items-center justify-center">
-            <Text className="text-[10px] text-gray-500 font-medium">
-              Total
-            </Text>
-            <Text className="text-xs font-semibold text-black">
-              {formatCurrency(totalAmount)}
-            </Text>
-          </View>
+          <PieChartWithTotal data={pieData} height={100} />
         </View>
 
         {/* Payment Info List */}

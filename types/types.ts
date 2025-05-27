@@ -11,9 +11,16 @@ export type Product = {
   stock: number;
   description?: string;
   sku?: string;
-  image?: ImageSourcePropType;
+  image?: string;
   active: boolean;
-  category: string;
+  categories: string[];
+}
+
+export type Category = {
+  id: string
+  name: string
+  image: string
+  products: string[]
 }
 
 
