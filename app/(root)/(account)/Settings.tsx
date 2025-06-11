@@ -2,7 +2,6 @@ import { View, Text, ScrollView, Image, TouchableOpacity, Alert } from 'react-na
 import React from 'react'
 import Header from '@/components/shared/Header'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { router } from 'expo-router'
 import images from '@/constants/images'
 import { Ionicons } from '@expo/vector-icons'
 import OptionItem from '@/components/screens/OptionItem'
@@ -11,13 +10,13 @@ import { useGlobalContext } from '@/context/GlobalContext'
 
 const Settings = () => {
   const insets = useSafeAreaInsets()
-  const { user, refetch } = useGlobalContext()
+  const { business, loading, refetchUser } = useGlobalContext()
 
-    const handleLogout = async () => {
+  const handleLogout = async () => {
     const result = await logout();
     if (result) {
       Alert.alert("Success", "Logged out successfully");
-      refetch();
+      refetchUser();
     } else {
       Alert.alert("Error", "Failed to logout");
     }
@@ -35,17 +34,38 @@ const Settings = () => {
           {/* Profile */}
           <View className='bg-green-600 rounded-xl flex-1 flex-col p-4 mt-1 mb-4 shadow-md'>
             <View className='flex-row justify-between'>
-              <Image source={images.avatar} className="size-24 rounded-full border-2 border-white"/>
+              <Image
+                source={business?.avatar ? {uri: business.avatar} : images.avatar}
+                className="size-24 rounded-full border-2 border-white"
+              />
               <View className='flex-col p-2 w-7/12'>
-                <Text className='text-lg text-white font-rubik-semibold'>Jus Jeruk</Text>
+                {loading ? (
+                  <Text className="text-lg text-white font-rubik-semibold">Loading...</Text>
+                ) : business ? (
+                  <Text className='text-lg text-white font-rubik-semibold'>{business.name}</Text>
+                ) : (
+                  <Text className="text-lg text-white font-rubik-semibold">Business not found</Text>
+                )}
                 <Text className='text-xs text-gray-200 font-rubik'>Restaurant</Text>
                 <View className='flex-row'>
                   <Ionicons name='call' color='white' size={16}/>
-                  <Text numberOfLines={1} className='text-sm text-white font-rubik'>+6282399012131</Text>
+                  {loading ? (
+                    <Text className="text-sm text-white font-rubik">Loading...</Text>
+                  ) : business ? (
+                    <Text className='text-sm text-white font-rubik'>{business.phone}</Text>
+                  ) : (
+                    <Text className="text-sm text-white font-rubik">Business not found</Text>
+                  )}
                 </View>
                 <View className='flex-row'>
                   <Ionicons name='location' color='white' size={16}/>
-                  <Text numberOfLines={2} className='text-sm text-white font-rubik'>Anggrek Mansion, Kemanggisan, Indonesia</Text>
+                  {loading ? (
+                    <Text className="text-sm text-white font-rubik">Loading...</Text>
+                  ) : business ? (
+                    <Text className='text-sm text-white font-rubik'>{business.address}</Text>
+                  ) : (
+                    <Text className="text-sm text-white font-rubik">Business not found</Text>
+                  )}
                 </View>
               </View>
               <TouchableOpacity>

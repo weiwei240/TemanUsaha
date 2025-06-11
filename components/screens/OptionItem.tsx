@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { router, Link } from 'expo-router';
-import { IconProps } from '@expo/vector-icons/build/createIconSet';
 
 type RoutePath = React.ComponentProps<typeof Link>['href'];
 

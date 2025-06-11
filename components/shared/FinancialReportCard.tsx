@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, Image, ViewStyle } from "react-native";
-import { PieChart } from "react-native-svg-charts";
 import icons from "@/constants/icons";
 import { ChartData } from "@/types/types";
 import { formatCurrency } from "@/utils/format";

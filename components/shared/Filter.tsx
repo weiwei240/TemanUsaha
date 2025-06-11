@@ -1,12 +1,13 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import icons from '@/constants/icons';
+import { CategorySegment } from '@/types/types';
 
 interface Props{
-  segments: string[];
+  segments: CategorySegment[];
 }
 
-const FilterDropdown = ({segments}: Props) => {
+const FilterDropdown = ({segments}: {segments: string[]}) => {
   const [selectedCategory, setSelectedCategory] = useState(0);
 
   return (
@@ -36,35 +37,44 @@ const FilterDropdown = ({segments}: Props) => {
   )
 }
 
-export const FilterHorizontal = ({segments}: Props) => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+export const FilterHorizontal = ({ segments }: Props) => {
+  const [selectedCategory, setSelectedCategory] = useState<CategorySegment | null>(null);
 
-  const handleCategoryPress = (category:string) => {
-    if(selectedCategory === category){
-      setSelectedCategory('All');
-      return;
+  const handleCategoryPress = (category: CategorySegment) => {
+    if (selectedCategory?.id === category.id) {
+      setSelectedCategory(null); // Deselect = show all
+    } else {
+      setSelectedCategory(category);
     }
-    setSelectedCategory(category);
-  }
-  
-  return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} className='py-2 ml-2 mr-5'>
-      {segments.map((item, index) => (
-        <TouchableOpacity 
-          key={index}
-          onPress={() => handleCategoryPress(item)}
-          className={`flex flex-col ml-2 mr-2 px-4 py-2 rounded-full border border-green-600 items-center ${
-            selectedCategory === item ? 'bg-green-600' : 'bg-white'
-          }`}
-        >
-          <Text className={`text-sm mt-1 font-rubik ${selectedCategory === item ? 'text-white' : 'text-black-300'}`}>{item}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  )
-}
+  };
 
-export const FilterSwitch = ({segments}: Props) => {
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="py-2 ml-2 mr-5">
+      {segments.map((item) => {
+        const isSelected = selectedCategory?.id === item.id;
+        return (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => handleCategoryPress(item)}
+            className={`flex flex-col ml-2 mr-2 px-4 py-2 rounded-full border border-green-600 items-center ${
+              isSelected ? "bg-green-600" : "bg-white"
+            }`}
+          >
+            <Text
+              className={`text-sm mt-1 font-rubik ${
+                isSelected ? "text-white" : "text-black-300"
+              }`}
+            >
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </ScrollView>
+  );
+};
+
+export const FilterSwitch = ({segments}: {segments: string[]}) => {
   const [selectedCategory, setSelectedCategory] = useState(segments[0]);
 
   const handleCategoryPress = (category:string) => {

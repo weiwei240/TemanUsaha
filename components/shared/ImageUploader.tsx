@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Alert, ImageSourcePropType } from 'react-native';
+import { View, Image, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 const MAX_IMAGE_SIZE = 10000 * 1024; // 10MB
 
-const ImageUploader = ({ onImageSelected }: {onImageSelected: (uri: string) => void}) => {
-  const [imageUri, setImageUri] = useState<string | null>(null);
+interface Props{
+  onImageSelected: (uri: string) => void
+  productImage?: string | null
+}
+
+const ImageUploader = ({ onImageSelected, productImage = null }: Props) => {
+  const [imageUri, setImageUri] = useState<string | null>(productImage);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

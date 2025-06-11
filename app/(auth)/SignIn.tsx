@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FilterSwitch } from '@/components/shared/Filter'
 import images from '@/constants/images'
 import FormField from '@/components/shared/FormField'
-import { Redirect, router } from 'expo-router'
+import { Redirect } from 'expo-router'
 import icons from '@/constants/icons'
 import { login } from '@/lib/appwrite'
 import { useGlobalContext } from '@/context/GlobalContext'
@@ -13,12 +13,12 @@ const segments = ["Sign Up", "Log In"]
 
 const SignIn = () => {
   const insets = useSafeAreaInsets()
-  const { refetch, loading, isLoggedIn } = useGlobalContext()
+  const { refetchUser, loading, isLoggedIn } = useGlobalContext()
   
   const handleLogin = async () => {
     const result = await login()
     if(result){
-      refetch()
+      refetchUser()
     }else{
       Alert.alert('Error', 'failed to login')
     }

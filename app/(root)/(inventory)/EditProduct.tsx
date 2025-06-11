@@ -12,49 +12,75 @@ import { useLocalSearchParams, router } from "expo-router";
 import Header from "@/components/shared/Header";
 import FormField from "@/components/shared/FormField";
 import { Product } from "@/types/types";
-import { products } from "@/data/dummy";
 import ImageUploader from "@/components/shared/ImageUploader";
-import { config, databases, getProductById } from "@/lib/appwrite";
-import { MultiSelectDropdown }
+import { config, databases, getProductById, getBusinessCategories } from "@/lib/appwrite";
+import MultiSelectDropdown from "@/components/shared/MultiSelectDropdown";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const EditProduct = () => {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const {businessId} = useGlobalContext()
 
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
-
-  useEffect(() => {
-  const loadProduct = async () => {
-    if (!id) return;
-    const product = await getProductById(id);
-    setProductToEdit(product);
-  };
-  loadProduct();
-}, [id]);
+  const [categoryOptions, setCategoryOptions] = useState<{ label: string; value: string }[]>([]);
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [unit, setUnit] = useState('');
+  const [unit, setUnit] = useState('Pcs');
   const [stock, setStock] = useState('');
   const [sku, setSku] = useState('');
-  const [categories, setCategories] = useState(['']);
+  const [categories, setCategories] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [active, setActive] = useState(true);
   const [imageUri, setImageUri] = useState<string | undefined>();
 
   useEffect(() => {
-    if (productToEdit) {
+    const loadProduct = async () => {
+      if (!id) return;
+      const product = await getProductById(id);
+      setProductToEdit(product);
+    };
+    loadProduct();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      if (!businessId) return;
+      const businessCategories = await getBusinessCategories({ businessId });
+
+      const options = businessCategories.map((cat) => ({
+        label: cat.name,
+        value: cat.id,
+      }));
+
+      setCategoryOptions(options);
+    };
+
+    fetchOptions();
+  }, [businessId]);
+
+  useEffect(() => {
+    if (
+      productToEdit &&
+      Array.isArray(productToEdit.categories) &&
+      productToEdit.categories.length > 0
+    ) {
       setName(productToEdit.name);
       setPrice(productToEdit.price.toString());
       setUnit(productToEdit.unit);
       setStock(productToEdit.stock.toString());
       setSku(productToEdit.sku || '');
-      setCategories(productToEdit.categories);
+      const categoryIds = productToEdit.categories.map((cat: any) =>
+        typeof cat === 'string' ? cat : cat.$id
+      );
+      setCategories(categoryIds);
       setDescription(productToEdit.description || '');
       setActive(productToEdit.active);
-      // if (typeof productToEdit.image === 'object' && productToEdit.image?.uri) {
-      //   setImageUri(productToEdit.image.uri);
-      // }
+      if (typeof productToEdit.image === 'object' && productToEdit.image) {
+        setImageUri(productToEdit.image);
+      }
+      // console.log("IDs: ", categoryIds, "Categories: ", categories)
     }
   }, [productToEdit]);
 
@@ -71,7 +97,7 @@ const EditProduct = () => {
       categories,
       description,
       active,
-      // image: imageUri ? { uri: imageUri } : undefined,
+      image: imageUri ? imageUri : undefined,
     };
 
     await databases.updateDocument(
@@ -87,7 +113,7 @@ const EditProduct = () => {
         categories,
         description,
         active,
-        image: imageUri ?? productToEdit.image, // assuming image is URL or file ID
+        image: imageUri ?? productToEdit.image
       }
     );
 
@@ -112,7 +138,7 @@ const EditProduct = () => {
       >
         <FormField label="Product Image">
           {() => (
-            <ImageUploader onImageSelected={(uri) => setImageUri(uri)} />
+            <ImageUploader onImageSelected={(uri) => setImageUri(uri)} productImage={productToEdit.image} />
           )}
         </FormField>
 
@@ -137,16 +163,20 @@ const EditProduct = () => {
         </FormField>
 
         <FormField label="Categories">
-          <MultiSelectDropdown
-            options={allCategories} // fetched from Appwrite
-            selected={selectedCategories}
-            onChange={setSelectedCategories}
-          />
+          {() => (
+            <MultiSelectDropdown
+              data={categoryOptions}
+              selected={categories}
+              onChange={setCategories}
+            />
+          )}
         </FormField>
 
-        <FormField label="Description">{() => (
+        <FormField label="Description">
+          {() => (
           <TextInput value={description} onChangeText={setDescription} multiline className="border rounded-md px-3 py-3 text-sm font-rubik h-24 text-start" />
-        )}</FormField>
+          )}
+        </FormField>
 
         <FormField label="SKU" enableSwitch switchValue={true} onSwitchChange={() => {}}>
           {() => (

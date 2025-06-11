@@ -1,5 +1,15 @@
 import { ImageSourcePropType } from 'react-native';
 
+// USERS
+
+export type Business = {
+  id: string
+  name: string
+  avatar: string
+  phone: string
+  address: string
+}
+
 // PRODUCTS
 
 export type Product = {
@@ -23,6 +33,10 @@ export type Category = {
   products: string[]
 }
 
+export type CategorySegment = {
+  id: string;
+  name: string;
+};
 
 export type OrderItem = Product & {
   qty: number;

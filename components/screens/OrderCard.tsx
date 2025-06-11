@@ -1,6 +1,5 @@
-import { View, Text, ImageSourcePropType, Image, Switch, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import icons from '@/constants/icons';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '@/utils/format';
 import { OrderItem } from '@/types/types';

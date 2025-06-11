@@ -1,7 +1,7 @@
 import { Account, Avatars, Client, Databases, OAuthProvider, Query } from "react-native-appwrite";
 import * as Linking from "expo-linking"
 import { openAuthSessionAsync } from "expo-web-browser"
-import { Category, Product } from "@/types/types";
+import { Business, Category, Product } from "@/types/types";
 
 export const config = {
   platform: 'com.temanusaha.pos',
@@ -15,8 +15,9 @@ export const config = {
   customersCollectionId: process.env.EXPO_PUBLIC_APPWRITE_CUSTOMERS_COLLECTION_ID,
   employeesCollectionId: process.env.EXPO_PUBLIC_APPWRITE_EMPLOYEES_COLLECTION_ID,
   offersCollectionId: process.env.EXPO_PUBLIC_APPWRITE_OFFERS_COLLECTION_ID,
+  orderItemsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_ORDERITEMS_COLLECTION_ID,
+  ordersCollectionId: process.env.EXPO_PUBLIC_APPWRITE_ORDERS_COLLECTION_ID,
   productsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_PRODUCTS_COLLECTION_ID,
-  transactionsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_TRANSACTIONS_COLLECTION_ID,
   variantsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_VARIANTS_COLLECTION_ID,
 }
 
@@ -109,18 +110,40 @@ export const resolveBusinessIdForUser = async (): Promise<string | null> => {
     [Query.equal("userId", user.$id)]
   );
 
-  // console.log(employeeRes.documents[0])
-
-  const employee = employeeRes.documents[0];
+  const employee = employeeRes.documents[0]; // works only for 1 employee per user
   if (!employee || !employee.business) {
     console.log("No employee or businesses", employee.business);
     return null;
   }
 
-  // console.log("Business ID:", employee.business.$id)
-
-  return employee.business.$id; // assuming one business
+  return employee.business.$id;
 };
+
+export const getBusiness = async ({ businessId }: { businessId: string }): Promise<Business | null> => {
+  try {
+    const result = await databases.listDocuments(
+      config.databaseId!,
+      config.businessesCollectionId!,
+      [Query.equal("$id", businessId)]
+    );
+
+    const doc = result.documents[0];
+    
+    if (!doc) return null;
+
+    return {
+      id: doc.$id,
+      name: doc.name,
+      avatar: doc.avatar,
+      phone: doc.phone,
+      address: doc.address,
+    };
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 
 export const getBusinessProducts = async ({
   businessId,
@@ -172,7 +195,7 @@ export const getProductById = async (productId: string): Promise<Product | null>
       stock: doc.stock,
       sold: doc.sold,
       sku: doc.sku,
-      categories: doc.category,
+      categories: doc.categories,
       description: doc.description,
       active: doc.active,
       image: doc.image,
@@ -220,6 +243,27 @@ export const getUserEmployees = async () => {
       phone: doc.phone,
       role: doc.role,
       business: doc.business,
+    }))
+  }catch(error){
+    console.error(error)
+    return []
+  }
+}
+
+export const getOrderSummary = async ({businessId}: {businessId: string}) => {
+  try{
+    const result = await databases.listDocuments(
+      config.databaseId!,
+      config.ordersCollectionId!,
+      [Query.equal("businessId", businessId)]
+    )
+    return result.documents.map((doc) => ({
+      id: doc.$id,
+      customers: doc.customers,
+      totalAmount: doc.totalAmount,
+      paymentMethod: doc.paymentMethod,
+      timestamp: doc.timestamp,
+      transactionItems: doc.transactionItems,
     }))
   }catch(error){
     console.error(error)

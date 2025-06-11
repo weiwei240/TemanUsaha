@@ -1,5 +1,5 @@
 import { View, Text, Switch, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 
 interface Props{

@@ -7,17 +7,13 @@ import FinancialReportCard from "@/components/shared/FinancialReportCard";
 import icons from "@/constants/icons";
 import { router } from "expo-router";
 import { paymentData, dummyArticles } from "@/data/dummy"
-import { getUserEmployees } from "@/lib/appwrite";
-import { useAppwrite } from "@/hooks/useAppwrite";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 export default function Home() {
   const insets = useSafeAreaInsets();
   const handleSettings = () => router.push('/Settings')
 
-  const {data: userEmployees, loading: userEmployeesLoading} = useAppwrite({
-    fn: getUserEmployees,
-  })
-
+  const {business, loading} = useGlobalContext()
   return (
     <ScrollView
       className="flex-1 bg-white"
@@ -28,13 +24,17 @@ export default function Home() {
         <View className="bg-green-700 px-5 pb-16 p-6 rounded-b-3xl flex-row items-center justify-between">
           <View className="flex-row items-center gap-3">
             <Image
-              source={images.avatar}
+              source={business?.avatar ? {uri: business.avatar} : images.avatar}
               className="size-16 rounded-full border-2 border-white"
             />
             <View>
-              <Text className="text-white text-xl font-rubik-bold">
-                Pelita Jaya Store
-              </Text>
+              {loading ? (
+                <Text className="text-white text-xl font-rubik-bold">Loading...</Text>
+              ) : business ? (
+                <Text className="text-white text-xl font-rubik-bold">{business.name}</Text>
+              ) : (
+                <Text className="text-white text-xl font-rubik-bold">Business not found</Text>
+              )}
               <TouchableOpacity onPress={handleSettings}>
                 <Text className="text-white text-sm font-rubik">
                   Edit Profile ✏️
@@ -59,9 +59,9 @@ export default function Home() {
 
       {/* Financial Report */}
       <View className="bg-white mx-4 rounded-2xl p-4 shadow-2xl">
-        <TouchableOpacity onPress={() => router.push('/SignIn')}>
+        {/* <TouchableOpacity onPress={() => router.push('/SignIn')}>
           <Text>Login Screen</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {/* Header */}
         <View className="flex-row justify-between items-center mb-2">
           <View>

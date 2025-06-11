@@ -1,21 +1,26 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
-import Header from '@/components/shared/Header'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { router } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
-import FormField from '@/components/shared/FormField'
-import ImageUploader from '@/components/shared/ImageUploader'
-import VariantCard from '@/components/screens/VariantCard'
-import { Product } from '@/types/types'
-import { products } from '@/data/dummy'
-import 'react-native-get-random-values'
-import { v4 as uuidv4 } from 'uuid'
-import images from '@/constants/images'
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import Header from '@/components/shared/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import FormField from '@/components/shared/FormField';
+import ImageUploader from '@/components/shared/ImageUploader';
+import MultiSelectDropdown from '@/components/shared/MultiSelectDropdown';
+import { databases, config, getBusinessCategories } from '@/lib/appwrite';
+import { ID } from 'react-native-appwrite';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const CreateProduct = () => {
-  const insets = useSafeAreaInsets()
-  const handleCategory = () => router.push('/Category')
+  const insets = useSafeAreaInsets();
+  const { businessId } = useGlobalContext();
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
@@ -24,60 +29,67 @@ const CreateProduct = () => {
   const [description, setDescription] = useState('');
   const [sku, setSku] = useState('');
   const [active, setActive] = useState(true);
-  const [category, setCategory] = useState('Uncategorized');
+  const [categories, setCategories] = useState<string[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<{ label: string; value: string }[]>([]);
   const [imageUri, setImageUri] = useState<string | undefined>();
 
-  const [stockForm, setStockForm] = useState(true);
-  const [skuForm, setSkuForm] = useState(true);
-  const [variantForm, setVariantForm] = useState(true);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (!businessId) return;
+      const businessCategories = await getBusinessCategories({ businessId });
+      const options = businessCategories.map((cat) => ({ label: cat.name, value: cat.id }));
+      setCategoryOptions(options);
+    };
+    fetchCategories();
+  }, [businessId]);
 
-  const handleCreate = () => {
-    const newProduct: Product = {
-      id: uuidv4(),
-      name,
-      price: parseInt(price),
-      unit: 'Pcs',
-      stock: parseInt(stock),
-      sold: 0,
-      active,
-      category: 'Uncategorized',
-      description,
-      sku,
-      // image: imageUri ? { uri: imageUri } : undefined,
-      image: images.avatar,
+  const handleCreate = async () => {
+    try {
+      await databases.createDocument(
+        config.databaseId!,
+        config.productsCollectionId!,
+        ID.unique(),
+        {
+          name,
+          price: parseInt(price),
+          unit,
+          stock: parseInt(stock),
+          description,
+          sku,
+          active,
+          categories,
+          business: businessId,
+          image: imageUri ?? '',
+        }
+      );
+
+      Alert.alert('Product Created', `${name} has been added.`);
+      router.push('/Inventory');
+    } catch (error) {
+      console.error('Error creating product:', error);
+      Alert.alert('Error', 'Failed to create product.');
     }
-    products.push(newProduct)
-    Alert.alert('Product Saved', `${name} has been added to ${category}`);
-    router.push('/Inventory');
-  }
+  };
 
   return (
-    <View className='flex-1 bg-white'>
-      <Header title='Create Product' white />
+    <View className="flex-1 bg-white">
+      <Header title="Create Product" white />
       <ScrollView
         className="px-5 py-2"
         contentContainerStyle={{ paddingTop: insets.top + 80, paddingBottom: 90 }}
       >
-        {/* Product Image */}
         <FormField label="Product Image">
-          {() => (
-            <View>
-              <ImageUploader onImageSelected={(uri) => setImageUri(uri)}/>
-              <Text className="text-xs text-gray-500 mt-1">Image size must less than 10MB</Text>
-            </View>
-          )}
+          {() => <ImageUploader onImageSelected={(uri) => setImageUri(uri)} />}
         </FormField>
 
-        {/* Product Status */}
         <FormField label="Product Status" enableSwitch switchValue={active} onSwitchChange={setActive}>
-          {(switchValue) => (
-              <Text className={`font-rubik ${switchValue ? 'text-green-700' : 'text-red-700'}`} >
-                {switchValue ? 'Active' : 'Inactive'}
-              </Text>
+          {(enabled) => (
+            <Text className={`font-rubik ${enabled ? 'text-green-700' : 'text-red-700'}`}>{
+              enabled ? 'Active' : 'Inactive'
+            }</Text>
           )}
         </FormField>
 
-        {/* Product Name */}
         <FormField label="Product Name" required>
           {() => (
             <TextInput
@@ -89,7 +101,6 @@ const CreateProduct = () => {
           )}
         </FormField>
 
-        {/* Selling Price */}
         <FormField label="Selling Price" required>
           {() => (
             <View
@@ -115,101 +126,67 @@ const CreateProduct = () => {
           )}
         </FormField>
 
-        {/* Stock */}
-        <FormField label="Stock" required enableSwitch switchValue={stockForm} onSwitchChange={setStockForm}>
-          {(switchValue) => (
+        <FormField label="Stock" required>
+          {() => (
             <TextInput
-              editable={switchValue}
-              placeholder="Enter stock.."
-              keyboardType='numeric'
+              placeholder="Enter stock..."
+              keyboardType="numeric"
               value={stock}
               onChangeText={setStock}
-              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!switchValue ? 'bg-gray-200' : ''}`}
+              className="border rounded-md px-3 py-3 text-sm font-rubik"
             />
           )}
         </FormField>
 
-        {/* Category */}
-        <FormField label="Category" required>
+        <FormField label="Categories" required>
           {() => (
-            <View className="flex-col justify-center items-end opacity-100">
-              <TouchableOpacity
-                className="flex-1 flex-row items-center w-full justify-between border rounded-md px-3 py-3"
-              >
-                <Text className="text-sm text-gray-800 font-rubik">Uncategorized</Text>
-                <Ionicons name='chevron-down-outline' size={16} color="gray" />
-              </TouchableOpacity>
-              <TouchableOpacity className="ml-2" onPress={handleCategory}>
-                <Text className="text-sm text-indigo-500 font-rubik-semibold">Edit Category</Text>
-              </TouchableOpacity>
-            </View>
+            <MultiSelectDropdown
+              data={categoryOptions}
+              selected={categories}
+              onChange={setCategories}
+            />
           )}
         </FormField>
 
-        {/* Description */}
         <FormField label="Description">
           {() => (
             <TextInput
               placeholder="Enter a description..."
-              textAlignVertical='top'
+              textAlignVertical="top"
               value={description}
               onChangeText={setDescription}
-              className="border rounded-md px-3 py-3 text-sm font-rubik h-48"
+              className="border rounded-md px-3 py-3 text-sm font-rubik h-24"
               multiline
             />
           )}
         </FormField>
 
-        {/* SKU */}
-        <FormField label="SKU" enableSwitch switchValue={skuForm} onSwitchChange={setSkuForm}>
-          {(switchValue) => (
+        <FormField label="SKU">
+          {() => (
             <TextInput
-              editable={switchValue}
+              placeholder="Enter SKU..."
               value={sku}
               onChangeText={setSku}
-              placeholder="Enter SKU..."
-              className={`border rounded-md px-3 py-3 text-sm font-rubik ${!switchValue ? 'bg-gray-200' : ''}`}
+              className="border rounded-md px-3 py-3 text-sm font-rubik"
             />
           )}
         </FormField>
-
-        {/* Variant */}
-        <FormField label="Variant" enableSwitch switchValue={variantForm} onSwitchChange={setVariantForm}>
-          {(switchValue) => (
-            <View className='items-center'>
-              {switchValue ?
-                [1, 2, 3].map((variant, i) => (
-                  <VariantCard key={i}/>
-                ))
-              :
-                <View></View>   
-              }
-              {switchValue ?
-                <TouchableOpacity className='bg-green-500 rounded-md p-2 flex-row'>
-                  <Text className='text-center font-rubik text-white mr-2'>Add Variant</Text>
-                  <Ionicons name='add-circle' color='white' size={24}/>
-                </TouchableOpacity>
-              :
-                <View></View>
-              }
-            </View>
-          )}
-        </FormField>
       </ScrollView>
-      <View className='absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2'>
-        <View className='flex flex-col items-center'>
-          <View className='px-5 py-2 w-full'>
+
+      <View className="absolute bg-white bottom-0 w-full rounded-t-2xl border border-primary-200 p-2">
+        <View className="flex flex-col items-center">
+          <View className="px-5 py-2 w-full">
             <TouchableOpacity
-              className='items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2'
+              className="items-center justify-center bg-green-600 rounded-lg shadow-md shadow-zinc-400 py-2"
               onPress={handleCreate}
             >
-              <Text className='text-white text-lg text-center font-rubik-bold mt-1'>Save Product</Text>
+              <Text className="text-white text-lg text-center font-rubik-bold mt-1">Save Product</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default CreateProduct
+export default CreateProduct;

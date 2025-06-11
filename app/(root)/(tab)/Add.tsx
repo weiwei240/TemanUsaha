@@ -13,28 +13,33 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import Header from "@/components/shared/Header";
 import { useEffect, useState } from "react";
-// import { products } from "@/data/dummy";
 import { useOrder } from "@/context/OrderContext";
 import { formatCurrency } from "@/utils/format";
 import { Product, OrderItem } from "@/types/types";
 import React from "react";
 import { useAppwrite } from "@/hooks/useAppwrite";
-import { getBusinessProducts } from "@/lib/appwrite";
-import { useGlobalContext } from "@/context/GlobalContext";
-
-const segments = ["All", "Category 1", "Category 2", "Category 3", "Category 4", "Category 5"];
+import { getBusinessCategories, getBusinessProducts } from "@/lib/appwrite";
+import { useBusinessParams } from "@/hooks/useBusinessParams";
 
 const Add = () => {
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false)
-  const { items, setItems, totalPrice, totalItems, setOrderInProgress } = useOrder();
-  const { businessId } = useGlobalContext()
-  
-  const { data: products, loading: productsLoading } = useAppwrite<Product[], { businessId: string }>({
+  const { items, setItems, totalPrice, totalItems } = useOrder();
+  const params = useBusinessParams();
+
+  const { data: products, loading:productsLoading } = useAppwrite({
     fn: getBusinessProducts,
-    params: { businessId: businessId! },
-    skip: !businessId, // optional: skip if businessId isn't ready
+    params: params!,
+    skip: !params,
+  });
+
+  const {data: categories, loading:categoriesLoading} = useAppwrite({
+    fn: getBusinessCategories,
+    params: params!,
+    skip: !params,
   })
+
+  const categorySegments = (categories ?? []).map(({ id, name }) => ({ id, name }));
 
   const availableProducts = products?.filter((item) => item.active);
 
@@ -83,7 +88,13 @@ const Add = () => {
       >
         {/* Search & Filter */}
         <Search />
-        <FilterHorizontal segments={segments}/>
+        {categoriesLoading ? (
+          <Text className="text-center text-gray-500 mt-4">Loading categories...</Text>
+        ) : categories ? (
+          <FilterHorizontal segments={categories}/>
+        ) : (
+          <Text className="text-center text-gray-500 mt-4">Categories not found</Text>
+        )}
 
         {/* Product List */}
         <View className="px-5 py-2 gap-1">

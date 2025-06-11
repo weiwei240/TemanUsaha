@@ -14,8 +14,8 @@ import { router } from "expo-router";
 import Header from "@/components/shared/Header";
 import { useAppwrite } from "@/hooks/useAppwrite";
 import { getBusinessCategories, getBusinessProducts } from "@/lib/appwrite";
-import { useGlobalContext } from "@/context/GlobalContext";
-import { Category, Product } from "@/types/types";
+import { Category } from "@/types/types";
+import { useBusinessParams } from "@/hooks/useBusinessParams";
 
 const segments = ["All Categories", "Sort By", "Status"];
 
@@ -24,18 +24,18 @@ export default function Inventory() {
   const handleFeatured = () => router.push('/Featured')
   const handleCategory = () => router.push('/Category')
   const handleCreateProduct = () => router.push('/CreateProduct')
-  const { businessId } = useGlobalContext()
-  
-  const { data: products, loading: productsLoading } = useAppwrite<Product[], { businessId: string }>({
+  const params = useBusinessParams();
+
+  const { data: products, loading:productsLoading } = useAppwrite({
     fn: getBusinessProducts,
-    params: { businessId: businessId! },
-    skip: !businessId, // optional: skip if businessId isn't ready
-  })
+    params: params!,
+    skip: !params,
+  });
 
   const { data: categories, loading: categoriesLoading } = useAppwrite<Category[], { businessId: string }>({
     fn: getBusinessCategories,
-    params: { businessId: businessId! },
-    skip: !businessId, // optional: skip if businessId isn't ready
+    params: params!,
+    skip: !params, // optional: skip if businessId isn't ready
   })
 
   return (
@@ -53,7 +53,7 @@ export default function Inventory() {
           >
             <Image source={icons.medal} className="size-7"></Image>
             <Text className="text-black font-rubik-semibold text-lg">
-              Featured (2)
+              Featured
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -62,27 +62,22 @@ export default function Inventory() {
           >
             <Image source={icons.category} className="size-7"></Image>
             <Text className="text-black font-rubik-semibold text-lg">
-              Category (2)
+              Categories
             </Text>
           </TouchableOpacity>
         </View>
 
         {/* Search & Filter */}
         <Search />
-        <FilterDropdown segments={segments}/>
+        {categoriesLoading ? (
+          <Text className="text-center text-gray-500 mt-4">Loading categories...</Text>
+        ) : categories ? (
+          <FilterDropdown segments={segments}/> // TBA
+        ) : (
+          <Text className="text-center text-gray-500 mt-4">Categories not found</Text>
+        )}
 
         {/* Product List */}
-        {/* {categories.map((category, index) => (
-          <View key={index} className="px-5 pt-2">
-            <Text className="text-base font-semibold mb-2">
-              {category.name} ({category.itemCount})
-            </Text>
-            {products.map((item, i) => (
-              item.categories.includes(category.name) &&
-              <InventoryCard item={item} key={i}/>
-            ))}
-          </View>
-        ))} */}
         {categoriesLoading || productsLoading ? (
           <Text className="text-center text-gray-500 mt-4">Loading products...</Text>
         ) : !categories || !products || categories.length === 0 ? (
